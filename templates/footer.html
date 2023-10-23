@@ -1,0 +1,27 @@
+
+{% load static %}
+<footer class="footer-section">
+        <div class="container">
+                <div class="d-flex justify-content-center">
+                    Copyright ©<script>document.write(new Date().getFullYear());</script> All rights reserved by <a href="http://www.al-enterprise.com/" target="_blank">&nbsp Alcatel-Lucent Enterprise</a>
+                </div>
+        </div>
+</footer>
+<script src="{% static 'js/jquery-3.7.1.js' %}"> </script>
+<script src="{% static 'js/bootstrap.min.js' %}"> </script>
+<script src="{% static 'js/owl.carousel.js' %}"></script>
+<script>
+    $(window).scroll(function(){  
+        if ($(this).scrollTop() > 44) {
+            // add padding top to show content behind navbar
+            $('.navbar').addClass("fixed-top", 1000);
+            $('.navbar').addClass("scroll_nav",1000);
+            $('.header-nav-link').addClass("scroll_nav",1000);
+
+        }else{
+            $('.navbar').removeClass("fixed-top",1000);
+            $('.navbar').removeClass("scroll_nav",1000);
+            $('.header-nav-link').removeClass("scroll_nav",1000);
+        }   
+    });
+</script>

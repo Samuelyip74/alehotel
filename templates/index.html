@@ -1,0 +1,98 @@
+{% extends "./base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="px-4 py-5 my-5 text-center" style="min-height:40vh;">
+    <h1 class="display-5 fw-bold" style="margin:1em;">Make Room Reservation</h1>
+    <div class="container">
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-sm">
+                    <div class="form-floating mb-3">
+                        {% if startdate %}
+                        <input name="start-date" type="date" class="form-control" placeholder="City" aria-label="City" value={{startdate}}>
+                        {% else %}
+                        <input name="start-date" type="date" class="form-control" placeholder="City" aria-label="City" >
+                        {% endif %}
+                        <label for="floatingInput">Start date</label>
+
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div class="form-floating mb-3">
+                        {% if enddate %}
+                        <input name="end-date" type="date" class="form-control" value={{enddate}}>
+                        {% else %}
+                        <input name="end-date" type="date" class="form-control">
+                        {% endif %}
+                        <label for="floatingInput">End date</label>
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div class="form-floating mb-3">
+                        <select name="guest" id="guest" name="guest" class="form-control">
+                            <option value="1"
+                            {% if guest == "1" %}
+                            selected
+                            {% else %}
+                            {% endif %}
+                            >1</option>
+                            <option value="2"
+                            {% if guest == "2" %}
+                            selected
+                            {% else %}
+                            {% endif %}                            
+                            >2</option>
+                            <option value="3"
+                            {% if guest == "3" %}
+                            selected
+                            {% else %}
+                            {% endif %}                            
+                            >3</option>
+                            <option value="4"
+                            {% if guest == "4" %}
+                            selected
+                            {% else %}
+                            {% endif %}                            
+                            >4</option>
+                        </select>
+                        <label for="floatingInput">Guest</label>
+                    </div>        
+                </div>
+            </div>
+            <div class="row g-3">
+                <div class="col-sm">
+                    <div class="form-floating mb-3">
+                        <button type="submit" class="btn btn-primary btn-lg" style="margin-top:1em;">Check Availability</button>
+                    </div>        
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% if guest %}
+<div class="px-4 py-5 my-5 text-center" style="min-height:40vh;">
+    <div class="row">
+
+        {% for product in product_obj %}
+            
+        <div class="col-sm-4">
+            <div class="card mb-3">
+                <img class="card-img-top" src={{product.image_url.url}} alt="Card image cap">
+                <div class="card-body">
+                <h5 class="card-title">{{ product.name}} - ${{product.price}}</h5>
+                <p class="card-text">{{ product.description |truncatechars:100}}</p>
+                <a href="booknow/{{startdate}}/{{enddate}}/{{guest}}/{{product.id}}/" class="btn btn-primary">Book Now</a>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+    </div>
+
+</div>
+{% endif %}
+
+
+{% endblock %}
