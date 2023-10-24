@@ -12,6 +12,7 @@ from reservation.models import Reservation
 def index(request):
     if request.method == 'POST':
         data = request.POST.copy()
+        print(data)
         product_obj = Product.objects.all()
         context = {
             'startdate' : data['start-date'],
@@ -28,8 +29,8 @@ def index(request):
         return HttpResponse(template.render(context,request))    
 
 def booking(request, startdate, enddate, guest, pk):
-    start_date_obj = datetime.strptime(startdate, '%Y-%m-%d')
-    end_date_obj = datetime.strptime(enddate, '%Y-%m-%d')
+    start_date_obj = datetime.strptime(startdate, '%d %B, %Y')
+    end_date_obj = datetime.strptime(enddate, '%d %B, %Y')
     delta = end_date_obj - start_date_obj    
     product_obj = Product.objects.get(id=pk)
 

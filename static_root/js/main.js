@@ -98,7 +98,8 @@
 	});
 
 	// owl carousel
-	var major2Carousel = $('.js-carousel-2');
+	// owl carousel
+	var major2Carousel = $('.major-caousel');
 	major2Carousel.owlCarousel({
     loop:true,
     autoplay: true,
@@ -117,11 +118,11 @@
         nav:false
       },
       600:{
-        items:2,
+        items:1,
         nav:false
       },
       1000:{
-        items:3,
+        items:1,
         dots: true,
         nav:true,
         loop:false
