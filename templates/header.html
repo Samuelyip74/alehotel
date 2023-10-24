@@ -1,42 +1,40 @@
 {% load static %}
-<nav class="navbar navbar-dark bg-dark fixed-top">
+<header class="site-header js-site-header">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'home' %}">ALE Hotel</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">ALE Hotel</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body">
-        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-          <li class="nav-item">
-            <a class="nav-link" href="#">Check-in</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Check-out</a>
-          </li>   
-          <li class="nav-item">
-            <a class="nav-link" href="#">Unlock Room</a>
-          </li>                                   
-          {% if user.is_authenticated %}
-          <li class="nav-item">
-            <a class="nav-link" href="#">My Bookings</a>
-            <a class="nav-link" href="#">Logout</a>
-          </li>            
-          {% else %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'account_login' %}">Login</a>
-          </li>           
-          {% endif %}            
-        </ul>
+    <div class="row align-items-center">
+      <div class="col-6 col-lg-4 site-logo aos-init aos-animate" data-aos="fade"><a href="index.html">ALE Hotel</a></div>
+      <div class="col-6 col-lg-8">
 
+
+        <div class="site-menu-toggle js-site-menu-toggle aos-init aos-animate" data-aos="fade">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <!-- END menu-toggle -->
+
+        <div class="site-navbar js-site-navbar">
+          <nav role="navigation">
+            <div class="container">
+              <div class="row full-height align-items-center">
+                <div class="col-md-6 mx-auto">
+                  <ul class="list-unstyled menu">
+                    <li class="active"><a href="index.html">Home</a></li>
+                    <li><a href="rooms.html">Rooms</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="events.html">Events</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="reservation.html">Reservation</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
       </div>
     </div>
   </div>
-</nav>
+</header>
 
 
 
