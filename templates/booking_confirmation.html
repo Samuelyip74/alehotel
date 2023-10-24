@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block content %}
+{% if user.is_authenticated %}
 <div class="px-4 py-5 my-5 text-center" style="min-height:40vh;">
     <h1 class="display-5 fw-bold" style="margin:1em;">Room Reservation</h1>
     <div class="container">
@@ -43,6 +44,37 @@
         </form>
     </div>
 </div>
-
+{% else %}
+<div class="px-4 py-5 my-5 text-center" style="min-height:40vh;">
+    <h1 class="display-5 fw-bold" style="margin:1em">Login your account to confirm reservation</h1>
+    <div class="container">
+      <form action="" method="post">
+        {% csrf_token %} 
+        <div class="row g-3">
+        
+          <div class="col-sm">
+            <div class="form-floating mb-3">
+              <input name="username" type="text" class="form-control" >
+              <label for="floatingInput">Username</label>
+            </div>
+          </div>
+          <div class="col-sm">
+            <div class="form-floating mb-3">
+              <input name="password" type="password" class="form-control">
+              <label for="floatingInput">Password</label>
+            </div>        
+          </div>
+        </div>
+        <div class="row g-3">
+          <div class="col-sm">
+            <div class="form-floating mb-3">
+              <button type="submit" class="btn btn-primary btn-lg" style="margin-top:1em;">Login</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+</div>
+{% endif %}
 
 {% endblock %}

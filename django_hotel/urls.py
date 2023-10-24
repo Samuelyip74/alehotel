@@ -7,6 +7,7 @@ from .views import index, booking
 
 urlpatterns = [
     path('booknow/<str:startdate>/<str:enddate>/<str:guest>/<int:pk>/', booking, name='booking'),
+    path('accounts/', include('allauth.urls')),    
     path('admin/', admin.site.urls),
     url(r'^$', index, name='home'),
 

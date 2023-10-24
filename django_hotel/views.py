@@ -5,6 +5,7 @@ import string
 import random
 import os
 from datetime import datetime
+from django.contrib.auth import authenticate,login
 from product.models import Product
 from reservation.models import Reservation
 
@@ -75,8 +76,40 @@ def booking(request, startdate, enddate, guest, pk):
     
     # user is not created or logged in
     else:
-        context = {
-        }
-        template = get_template( 'index.html')
-        return HttpResponse(template.render(context,request))         
+        if request.method == 'POST':
+            data = request.POST.copy()
+            user_obj = authenticate(username=data['username'], password=data['password'])
+            if user_obj is not None and user_obj.is_active:
+                login(request, user_obj)
+                context = {
+                    'startdate' : start_date_obj,
+                    'enddate' : end_date_obj,
+                    'duration' : delta.days,
+                    'guest' : guest,
+                    'product_obj': product_obj,
+                    't_price' : t_price
+                }
+                template = get_template( 'booking_confirmation.html')
+                return HttpResponse(template.render(context,request))   
+            else:
+                context = {
+                    'startdate' : start_date_obj,
+                    'enddate' : end_date_obj,
+                    'duration' : delta.days,
+                    'guest' : guest,
+                    'product_obj': product_obj,
+                    't_price' : t_price
+                }
+                template = get_template( 'booking_confirmation.html')
+                return HttpResponse(template.render(context,request))       
     
+        context = {
+            'startdate' : start_date_obj,
+            'enddate' : end_date_obj,
+            'duration' : delta.days,
+            'guest' : guest,
+            'product_obj': product_obj,
+            't_price' : t_price
+        }
+        template = get_template( 'booking_confirmation.html')
+        return HttpResponse(template.render(context,request))  
