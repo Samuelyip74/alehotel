@@ -1,0 +1,30 @@
+{% extends "./base.html" %}
+{% load static %}
+
+{% block content %}
+
+{% if product_obj %}
+<div class="px-4 py-5 my-5 text-center" style="min-height:40vh;">
+    <div class="row">
+
+        {% for product in product_obj %}
+            
+        <div class="col-sm-4">
+            <div class="card mb-3">
+                <img class="card-img-top" src={{product.image_url.url}} alt="Card image cap">
+                <div class="card-body">
+                <h5 class="card-title">{{ product.name}} - ${{product.price}}</h5>
+                <p class="card-text">{{ product.description |truncatechars:100}}</p>
+                <a href="booknow/{{startdate}}/{{enddate}}/{{guest}}/{{product.id}}/" class="btn btn-primary">Book Now</a>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+    </div>
+
+</div>
+{% endif %}
+
+
+{% endblock %}

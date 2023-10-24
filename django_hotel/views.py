@@ -10,9 +10,14 @@ from product.models import Product
 from reservation.models import Reservation
 
 def index(request):
+    context = {
+    }
+    template = get_template( 'index.html')
+    return HttpResponse(template.render(context,request))    
+
+def list_rooms(request):
     if request.method == 'POST':
         data = request.POST.copy()
-        print(data)
         product_obj = Product.objects.all()
         context = {
             'startdate' : data['start-date'],
@@ -20,13 +25,13 @@ def index(request):
             'guest' : data['guest'],
             'product_obj' : product_obj
         }
-        template = get_template( 'index.html')
+        template = get_template( 'listrooms.html')
         return HttpResponse(template.render(context,request))   
     else:
         context = {
         }
         template = get_template( 'index.html')
-        return HttpResponse(template.render(context,request))    
+        return HttpResponse(template.render(context,request))      
 
 def booking(request, startdate, enddate, guest, pk):
     start_date_obj = datetime.strptime(startdate, '%d %B, %Y')
