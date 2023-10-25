@@ -7,11 +7,11 @@ from .views import index, booking, list_rooms, check_in, check_out, check_in_out
 
 urlpatterns = [
     path('booknow/<str:startdate>/<str:enddate>/<str:guest>/<int:pk>/', booking, name='booking'),
-    path('check_in_out', check_in_out, name='check_in_out'),
+    path('check_in_out/', check_in_out, name='check_in_out'),
     path('check_in/<int:pk>/', check_in_confirmation, name='check_in_confirmation'),
-    path('check_in', check_in, name='check_in'),
-    path('check_out', check_out, name='check_out'),
-    path('list', list_rooms, name='listing'),
+    path('check_in/', check_in, name='check_in'),
+    path('check_out/', check_out, name='check_out'),
+    path('list/', list_rooms, name='listing'),
     path('accounts/', include('allauth.urls')),    
     path('admin/', admin.site.urls),
     url(r'^$', index, name='home'),
