@@ -1,0 +1,27 @@
+{% extends "./base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container" style="margin:auto;width:50%;min-height: 80vh; display: flex;
+justify-content: center;
+align-items: center;">
+    <div class="px-4 py-5 my-5 text-center">
+        <h2 class="heading" style="font-size:3em">Welcome to ALE Hotel</h2>
+        <h2 class="heading" style="font-size:xx-large">How can we help you today!</h2>
+
+        <div class="row"  style="margin-top:2em;">
+            <div class="col-sm-6" style="margin:auto;width:50%">
+                <a href="{% url 'check_in' %}" class="btn btn-primary btn-lg">Check in</a>
+            </div>
+            <div class="col-sm-6">
+                <a href="{% url 'check_out' %}" class="btn btn-primary btn-lg">Check out</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+{% endblock %}

@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'product',
     'reservation',
+    'room',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',    

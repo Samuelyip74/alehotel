@@ -1,0 +1,58 @@
+{% extends "./base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container" style="margin:auto;width:50%;min-height: 80vh; display: flex;
+justify-content: center;
+align-items: center;">
+    {% if reserve_obj %}
+    <div class="px-4 py-5 my-5 text-center">
+        <h1 class="display-5 fw-bold" style="margin:1em;min-width: 8em;">Your Stay</h1>
+        <table class="table table-striped">
+          <tbody>
+            <tr><td>Room Type</td><td>{{ reserve_obj.room.name }}</td></tr>
+            <tr><td>From</td><td>{{ reserve_obj.start_date|date:'d M, Y' }}</td></tr>
+            <tr><td>To</td><td>{{ reserve_obj.end_date|date:'d M, Y' }}</td></tr>
+            <tr><td>Duration</td><td>{{ reserve_obj.days }}</td></tr>
+            <tr><td>Guest</td><td>{{ reserve_obj.guest }}</td></tr>
+            <tr><td>Total Price</td><td>${{ reserve_obj.price }}</td></tr>
+          </tbody>  
+        </table>
+        <a href="{% url 'check_in'%}/{{reserve_obj.id}}/" class="btn btn-primary btn-lg" style="margin-top:1em;">Confirm</a>
+
+    </div>
+    {% else %}
+    <div class="px-4 py-5 my-5 text-center">
+        <h2 class="heading" style="font-size:3em">Enter your reservation code:</h2>
+        <div class="row"  style="margin-top:2em;">
+            <div class="col-sm">
+                <form action="" method="post">
+                    {% csrf_token %} 
+                    <div class="row">
+                      <div class="col-sm">
+                        <div class="form-floating mb-3">
+                          <input name="code" type="text" class="form-control" >
+                          <label for="floatingInput">Reservation Code</label>
+                        </div>
+                      </div>
+                    </div>
+       
+                    <div class="row">
+                      <div class="col-sm">
+                        <div class="form-floating mb-3">
+                          <button type="submit" class="btn btn-primary btn-lg" style="margin-top:1em;">Submit</button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>            
+            </div>
+        </div>
+
+    </div>
+    {% endif %}
+</div>
+
+
+
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "./base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container" style="margin:auto;width:50%;min-height: 80vh; display: flex;
+justify-content: center;
+align-items: center;">
+    <div class="px-4 py-5 my-5 text-center">
+        <h1 class="display-5 fw-bold" style="margin:1em;min-width: 8em;">Your Room number is {{ room_obj.number }}</h1>
+
+
+    </div>
+
+</div>
+
+
+
+{% endblock %}

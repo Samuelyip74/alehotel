@@ -20,7 +20,7 @@
                 <div class="col-md-6 mx-auto">
                   <ul class="list-unstyled menu">
                     <li class="active"><a href="{% url 'home' %}">Home</a></li>
-                    <li><a href="rooms.html">Check-in / Check-out</a></li>
+                    <li><a href="{% url 'check_in_out' %}">Check-in / Check-out</a></li>
                     <li><a href="about.html">Visual Automated Assistant</a></li>
                     <li><a href="https://192.168.2.194">OmniVista 2500 NMS</a></li>
                     {% if user.is_authenticated %}

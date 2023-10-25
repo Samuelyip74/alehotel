@@ -8,6 +8,7 @@ from datetime import datetime
 from django.contrib.auth import authenticate,login
 from product.models import Product
 from reservation.models import Reservation
+from room.models import Room
 
 def index(request):
     context = {
@@ -119,3 +120,43 @@ def booking(request, startdate, enddate, guest, pk):
         }
         template = get_template( 'booking_confirmation.html')
         return HttpResponse(template.render(context,request))  
+
+
+def check_in_out(request):
+    context = {
+
+    }
+    template = get_template( 'check_in_out.html')
+    return HttpResponse(template.render(context,request))  
+
+def check_in(request):
+    if request.method == "POST":
+        data = request.POST.copy()
+        reserve_obj = Reservation.objects.get(code=data['code'])
+        context = {
+            "reserve_obj" : reserve_obj
+        }
+        template = get_template( 'check_in.html')
+        return HttpResponse(template.render(context,request))          
+
+    else:
+
+        context = {
+
+        }
+        template = get_template( 'check_in.html')
+        return HttpResponse(template.render(context,request))  
+
+def check_in_confirmation(request, pk):
+    reserve_obj = Reservation.objects.get(id=pk)
+    room_obj = Room.objects.filter(room_type__name__contains = reserve_obj.room.name, room_type__is_active=True)[:1].get()
+    room_obj.is_active = True
+    room_obj.save()
+    context = {
+        "room_obj": room_obj
+    }
+    template = get_template( 'room_confirmation.html')
+    return HttpResponse(template.render(context,request))  
+
+def check_out(requst):
+    pass
