@@ -2,7 +2,67 @@
 {% load static %}
 
 {% block content %}
+<section class="site-hero overlay" style="background-image: url(&quot;{% static 'images/hero_4.jpg' %}&quot;); background-position: 0% 0px;" data-stellar-background-ratio="0.5">
+  <div class="container">
+    <div class="row site-hero-inner justify-content-center align-items-center">
+      <div class="col-md-10 text-center aos-init aos-animate" data-aos="fade-up">
+        <span class="custom-caption text-uppercase text-white d-block  mb-3">Welcome To ALE <span class="fa fa-star text-primary"></span>   Hotel</span>
+        <h1 class="heading">The Best Digital Experience</h1>
+      </div>
+    </div>
+  </div>
 
+  <a class="mouse smoothscroll" href="#next">
+    <div class="mouse-icon">
+      <span class="mouse-wheel"></span>
+    </div>
+  </a>
+</section>
+<section class="section bg-light pb-0">
+  <div class="container">
+   
+    <div class="row check-availabilty" id="next">
+      <div class="block-32 aos-init aos-animate" data-aos="fade-up" data-aos-offset="-200">
+        <form action="/list" method="post">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-md-6 mb-3 mb-lg-0 col-lg-3">
+              <label for="checkin_date" class="font-weight-bold text-black">Check In</label>
+              <div class="field-icon-wrap">
+                <div class="icon"><span class="icon-calendar"></span></div>
+                <input type="text" id="checkin_date" name="start-date" class="form-control">
+              </div>
+            </div>
+            <div class="col-md-6 mb-3 mb-lg-0 col-lg-3">
+              <label for="checkout_date" class="font-weight-bold text-black">Check Out</label>
+              <div class="field-icon-wrap">
+                <div class="icon"><span class="icon-calendar"></span></div>
+                <input type="text" id="checkout_date" name="end-date" class="form-control">
+              </div>
+            </div>
+            <div class="col-md-6 mb-3 mb-md-0 col-lg-3">
+                  <label for="adults" class="font-weight-bold text-black">Guests</label>
+                  <div class="field-icon-wrap">
+                    <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                    <select id="guest" name="guest" class="form-control">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4+</option>
+                    </select>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-3 align-self-end">
+              <button class="btn btn-primary btn-block text-white">Check Availabilty</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+
+    </div>
+  </div>
+</section>
 <section class="py-5 bg-light">
     <div class="container">
       <div class="row align-items-center">
