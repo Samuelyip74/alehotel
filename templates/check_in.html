@@ -19,7 +19,7 @@ align-items: center;">
             <tr><td>Total Price</td><td>${{ reserve_obj.price }}</td></tr>
           </tbody>  
         </table>
-        <a href="{% url 'check_in'%}/{{reserve_obj.id}}/" class="btn btn-primary btn-lg" style="margin-top:1em;">Confirm</a>
+        <a href="{% url 'check_in'%}{{reserve_obj.id}}/" class="btn btn-primary btn-lg" style="margin-top:1em;">Confirm</a>
 
     </div>
     {% else %}

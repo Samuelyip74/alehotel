@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 import string
 import random
 import os
+import json
 from datetime import datetime
 from django.contrib.auth import authenticate,login
 from product.models import Product
@@ -132,31 +133,48 @@ def check_in_out(request):
 def check_in(request):
     if request.method == "POST":
         data = request.POST.copy()
-        reserve_obj = Reservation.objects.get(code=data['code'])
-        context = {
-            "reserve_obj" : reserve_obj
-        }
-        template = get_template( 'check_in.html')
-        return HttpResponse(template.render(context,request))          
+        try:
+            reserve_obj = Reservation.objects.get(code=data['code'],is_active=True)
+            context = {
+                "reserve_obj" : reserve_obj
+            }
+            template = get_template( 'check_in.html')
+            return HttpResponse(template.render(context,request)) 
+        except Reservation.DoesNotExist:
+            context = {
+            }                
+            template = get_template( 'no_reservation_found.html')
+            return HttpResponse(template.render(context,request))                    
 
     else:
-
         context = {
-
-        }
+        }        
         template = get_template( 'check_in.html')
         return HttpResponse(template.render(context,request))  
 
 def check_in_confirmation(request, pk):
     reserve_obj = Reservation.objects.get(id=pk)
     room_obj = Room.objects.filter(room_type__name__contains = reserve_obj.room.name, room_type__is_active=True)[:1].get()
-    room_obj.is_active = True
-    room_obj.save()
+    if request.META.get("HTTP_X_REQUESTED_WITH") == "XMLHttpRequest":
+        data = json.load(request)
+        profile_image = data.get('imgBase64')
+        room_obj.is_active = True
+        room_obj.save()
+        reserve_obj.is_active = False
+        reserve_obj.save()
+        return JsonResponse({'status': "uploaded"})               
+    else:
+        context = {
+            "room_obj": room_obj
+        }
+        template = get_template( 'room_confirmation.html')
+        return HttpResponse(template.render(context,request))  
+
+def check_in_completed(request):
     context = {
-        "room_obj": room_obj
     }
-    template = get_template( 'room_confirmation.html')
-    return HttpResponse(template.render(context,request))  
+    template = get_template( 'check_in_completed.html')
+    return HttpResponse(template.render(context,request))          
 
 def check_out(requst):
     pass

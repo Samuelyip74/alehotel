@@ -42,6 +42,8 @@
       canvas = document.getElementById("canvas");
       photo = document.getElementById("photo");
       startbutton = document.getElementById("startbutton");
+      retakebutton = document.getElementById("retake");
+
   
       navigator.mediaDevices
         .getUserMedia({ video: true, audio: false })
@@ -85,6 +87,14 @@
         false,
       );
   
+      retakebutton.addEventListener(
+        "click",
+        (ev) => {
+          retake();
+          ev.preventDefault();
+        },
+        false,        
+      )
       clearphoto();
     }
   
@@ -114,10 +124,49 @@
         context.drawImage(video, 0, 0, width, height);
   
         const data = canvas.toDataURL("image/png");
+        console.log(data);
         photo.setAttribute("src", data);
+        document.getElementById("output").style.display = "inline-block"; 
+        document.getElementById("camera").style.display = "none"; 
+
+        var csrftoken1 = getCookie('csrftoken');
+
+        $.ajax({
+          type: "POST",
+          url: "http://192.168.2.243:8000/check_in/35/",
+          headers: { 'X-CSRFToken ': csrftoken }, 
+          data: { 
+             csrfmiddlewaretoken: csrftoken,
+             imgBase64: data
+          }
+        }).done(function(response) {
+          console.log('saved: ' + response); 
+        });
+
       } else {
         clearphoto();
       }
+    }
+
+    function retake() {
+      document.getElementById("output").style.display = "none"; 
+      document.getElementById("camera").style.display = "inline-block"; 
+    }
+
+    function getCookie(cname) {
+      let name = cname + "=";
+      let decodedCookie = decodeURIComponent(document.cookie);
+      let ca = decodedCookie.split(';');
+      for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
     }
   
     // Set up our event listener to run the startup process
