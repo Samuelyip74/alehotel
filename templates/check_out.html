@@ -1,0 +1,41 @@
+{% extends "./base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container" style="margin:auto;width:50%;min-height: 80vh; display: flex;
+justify-content: center;
+align-items: center;">
+
+    <div class="px-4 py-5 my-5 text-center">
+        <h2 class="heading" style="font-size:3em">Enter your room number:</h2>
+        <div class="row"  style="margin-top:2em;">
+            <div class="col-sm">
+                <form action="" method="post">
+                    {% csrf_token %} 
+                    <div class="row">
+                      <div class="col-sm">
+                        <div class="form-floating mb-3">
+                          <input name="room_num" type="text" class="form-control" >
+                          <label for="floatingInput">Room Number</label>
+                        </div>
+                      </div>
+                    </div>
+       
+                    <div class="row">
+                      <div class="col-sm">
+                        <div class="form-floating mb-3">
+                          <button type="submit" class="btn btn-primary btn-lg" style="margin-top:1em;">Submit</button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>            
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+{% endblock %}

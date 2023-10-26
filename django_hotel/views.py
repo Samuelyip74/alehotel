@@ -154,7 +154,7 @@ def check_in(request):
 
 def check_in_confirmation(request, pk):
     reserve_obj = Reservation.objects.get(id=pk)
-    room_obj = Room.objects.filter(room_type__name__contains = reserve_obj.room.name, room_type__is_active=True)[:1].get()
+    room_obj = Room.objects.filter(room_type__name__contains = reserve_obj.room.name, is_active=False)[:1].get()
     if request.META.get("HTTP_X_REQUESTED_WITH") == "XMLHttpRequest":
         data = json.load(request)
         profile_image = data.get('imgBase64')
@@ -176,5 +176,25 @@ def check_in_completed(request):
     template = get_template( 'check_in_completed.html')
     return HttpResponse(template.render(context,request))          
 
-def check_out(requst):
-    pass
+def check_out(request):
+    if request.method == "POST":
+        data = request.POST.copy()
+        try:
+            room_obj = Room.objects.get(number=data['room_num'], is_active=True)
+            room_obj.is_active = False
+            room_obj.save()
+            context = {
+            }
+            template = get_template( 'check_out_completed.html')
+            return HttpResponse(template.render(context,request)) 
+        except Room.DoesNotExist:
+            context = {
+            }                
+            template = get_template( 'check_out_error.html')
+            return HttpResponse(template.render(context,request))                    
+
+    else:
+        context = {
+        }        
+        template = get_template( 'check_out.html')
+        return HttpResponse(template.render(context,request))  

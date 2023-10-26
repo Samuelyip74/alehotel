@@ -171,7 +171,6 @@ align-items: center;">
       document.getElementById("camera").style.display = "none"; 
 
       $.ajax({
-        url: "https://192.168.2.243/check_in/35/",
         type: "POST",
         dataType: "json",
         data: JSON.stringify({imgBase64: data,}),
