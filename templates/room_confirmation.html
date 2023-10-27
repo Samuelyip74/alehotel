@@ -165,8 +165,8 @@ align-items: center;">
       canvas.height = height;
       context.drawImage(video, 0, 0, width, height);
 
-      // const data = canvas.toDataURL("image/png");
-      const data = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+      const data = canvas.toDataURL("image/png");
+      // const data = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
 
       photo.setAttribute("src", data);
       document.getElementById("output").style.display = "inline-block"; 

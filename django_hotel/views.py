@@ -10,8 +10,12 @@ from django.contrib.auth import authenticate,login
 from product.models import Product
 from reservation.models import Reservation
 from room.models import Room
-import pickle
+import face_recognition
 from PIL import Image
+import base64
+import cv2
+import pickle
+import numpy as np
 
 def index(request):
     context = {
@@ -161,12 +165,30 @@ def check_in_confirmation(request, pk):
 
     if request.META.get("HTTP_X_REQUESTED_WITH") == "XMLHttpRequest":
         data = json.load(request)
-        profile_image = data.get('imgBase64')
+        image = data.get('imgBase64')
+        profile_image = image.removeprefix("data:image/png;base64,")
         room_obj.is_active = True
         room_obj.save()
         reserve_obj.is_active = False
         reserve_obj.save()
-        
+
+        imgdata = base64.b64decode(profile_image)
+        filename = '/var/www/alehotel/django_hotel/media/some_image.jpg'  # I assume you have a way of picking unique filenames
+        with open(filename, 'wb') as f:
+            f.write(imgdata)  
+        all_face_encodings = {}
+        # with open('/var/www/alehotel/django_hotel/media/dataset_faces.dat', 'rb') as f:
+        #     try:
+        #         while True:
+        #             all_face_encodings.append(pickle.load(f))
+        #     except EOFError:
+        #         pass            
+
+        saved_image = face_recognition.load_image_file("/var/www/alehotel/django_hotel/media/some_image.jpg")
+        all_face_encodings[str(room_obj.number)] = face_recognition.face_encodings(saved_image)[0]
+        with open('/var/www/alehotel/django_hotel/media/dataset_faces.dat', 'wb') as f:
+            pickle.dump(all_face_encodings, f)
+
         return JsonResponse({'status': "uploaded"})               
     else:
         context = {
@@ -216,3 +238,10 @@ def unlock_door(request):
         }
         template = get_template( 'unlock_room.html')
         return HttpResponse(template.render(context,request))          
+
+
+def stringToRGB(base64_string):
+    imgdata = base64.b64decode(str(base64_string))
+    img = Image.open(io.BytesIO(imgdata))
+    opencv_img = cv2.cvtColor(np.array(img), cv2.COLOR_BGR2RGB)
+    return opencv_img        
