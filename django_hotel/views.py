@@ -10,6 +10,8 @@ from django.contrib.auth import authenticate,login
 from product.models import Product
 from reservation.models import Reservation
 from room.models import Room
+import pickle
+from PIL import Image
 
 def index(request):
     context = {
@@ -153,8 +155,10 @@ def check_in(request):
         return HttpResponse(template.render(context,request))  
 
 def check_in_confirmation(request, pk):
+    
     reserve_obj = Reservation.objects.get(id=pk)
     room_obj = Room.objects.filter(room_type__name__contains = reserve_obj.room.name, is_active=False)[:1].get()
+
     if request.META.get("HTTP_X_REQUESTED_WITH") == "XMLHttpRequest":
         data = json.load(request)
         profile_image = data.get('imgBase64')
@@ -162,6 +166,7 @@ def check_in_confirmation(request, pk):
         room_obj.save()
         reserve_obj.is_active = False
         reserve_obj.save()
+        
         return JsonResponse({'status': "uploaded"})               
     else:
         context = {
@@ -198,3 +203,16 @@ def check_out(request):
         }        
         template = get_template( 'check_out.html')
         return HttpResponse(template.render(context,request))  
+
+
+def unlock_door(request):
+
+    if request.META.get("HTTP_X_REQUESTED_WITH") == "XMLHttpRequest":
+        data = json.load(request)
+        profile_image = data.get('imgBase64')
+        return JsonResponse({'status': "uploaded"})               
+    else:
+        context = {
+        }
+        template = get_template( 'unlock_room.html')
+        return HttpResponse(template.render(context,request))          
