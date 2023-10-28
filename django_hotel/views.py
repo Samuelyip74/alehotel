@@ -165,27 +165,45 @@ def check_in_confirmation(request, pk):
 
     if request.META.get("HTTP_X_REQUESTED_WITH") == "XMLHttpRequest":
         data = json.load(request)
+
+        # save data to variable image
         image = data.get('imgBase64')
+
+        # remove prefix to make image base64 encoding
         profile_image = image.removeprefix("data:image/png;base64,")
         room_obj.is_active = True
         room_obj.save()
         reserve_obj.is_active = False
         reserve_obj.save()
 
+        # save image to file
         imgdata = base64.b64decode(profile_image)
-        filename = '/var/www/alehotel/django_hotel/media/some_image.jpg'  # I assume you have a way of picking unique filenames
+        filename = '/var/www/alehotel/django_hotel/media/base64.jpg'  # I assume you have a way of picking unique filenames
+
+        # open image file
         with open(filename, 'wb') as f:
             f.write(imgdata)  
-        all_face_encodings = {}
-        # with open('/var/www/alehotel/django_hotel/media/dataset_faces.dat', 'rb') as f:
-        #     try:
-        #         while True:
-        #             all_face_encodings.append(pickle.load(f))
-        #     except EOFError:
-        #         pass            
 
+        # defined all faces encoding dictionary            
+        all_face_encodings = {}
+
+        # if dataset_faces.dat exist, load saved encoding into all_face_encodings
+        try:
+            with open('/var/www/alehotel/django_hotel/media/dataset_faces.dat', 'rb') as f:
+                openfile = pickle.load(f)
+            
+            for key in openfile:
+                all_face_encodings[key] = openfile[key]       
+        except:
+            pass
+
+        # convert image to face_encoding
         saved_image = face_recognition.load_image_file("/var/www/alehotel/django_hotel/media/some_image.jpg")
+
+        # save face_encoding into all_face_encodings variable
         all_face_encodings[str(room_obj.number)] = face_recognition.face_encodings(saved_image)[0]
+
+        # save updated encoding to dataset_faces.dat
         with open('/var/www/alehotel/django_hotel/media/dataset_faces.dat', 'wb') as f:
             pickle.dump(all_face_encodings, f)
 
