@@ -23,9 +23,12 @@ align-items: center;">
         <div class="row">
           <div class="col-sm">
             <div class="row" style="margin:2em;">
-              <div class="col-sm-4"><button id="startbutton" class="btn btn-primary btn-lg">Scan</button></div>
-              <div class="col-sm-4"><button id="retake" class="btn btn-primary btn-lg">Retake</button></div>
-              <div class="col-sm-4"><a href="{% url 'check_in_completed' %}" id="next" class="btn btn-primary btn-lg">Next</a></div>
+              <div class="col-sm-4" style="margin:auto">
+                <h1 id = "replace">Door Close</h1>
+               </div>
+            </div>            
+            <div class="row" style="margin:2em;">
+              <div class="col-sm-4" style="display: None;"><button id="startbutton" class="btn btn-primary btn-lg">Scan</button></div>
             </div>
           </div>
         </div>
@@ -60,8 +63,6 @@ align-items: center;">
   canvas = document.getElementById("canvas");
   photo = document.getElementById("photo");
   startbutton = document.getElementById("startbutton");
-  retakebutton = document.getElementById("retake");
-  document.getElementById('next').disabled = true;
 
   video.addEventListener(
         "canplay",
@@ -95,15 +96,7 @@ align-items: center;">
     false,
   );
 
-  retakebutton.addEventListener(
-    "click",
-    (ev) => {
-      retake();
-      ev.preventDefault();
-    },
-    false,        
-  )
-      
+    
   
   function showViewLiveResultButton() {
     if (window.self !== window.top) {
@@ -165,19 +158,23 @@ align-items: center;">
 
       const data = canvas.toDataURL("image/png");
       photo.setAttribute("src", data);
-      document.getElementById("output").style.display = "inline-block"; 
-      document.getElementById("camera").style.display = "none"; 
 
       $.ajax({
+        url: "https://192.168.2.243/unlock_door/",
         type: "POST",
         dataType: "json",
         data: JSON.stringify({imgBase64: data,}),
         headers: { 'X-CSRFToken' : '{{ csrf_token }}' }, 
         success: (data) => {
-          if (data['status'] == 'uploaded'){
-            document.getElementById('startbutton').disabled = true;
-            document.getElementById('next').disabled = false;
-            console.log(data);
+          if (data['status'] === 'Not found'){
+              let str = '<h1 id = "replace">Door Close</h1>';
+              var Obj = document.getElementById('replace'); 
+              Obj.outerHTML = str ;
+          }
+          else {
+            let str = '<h1 id = "replace">Door Open</h1>';
+              var Obj = document.getElementById('replace'); 
+              Obj.outerHTML = str ;
           }
         },
         error: (error) => {
@@ -203,7 +200,9 @@ align-items: center;">
     // Set up our event listener to run the startup process
     // once loading is complete.
   window.addEventListener("load", startup, false);
-
+  setInterval(function() {
+      takepicture();
+  }, 3000);
 
 </script>
 

@@ -198,7 +198,7 @@ def check_in_confirmation(request, pk):
             pass
 
         # convert image to face_encoding
-        saved_image = face_recognition.load_image_file("/var/www/alehotel/django_hotel/media/some_image.jpg")
+        saved_image = face_recognition.load_image_file("/var/www/alehotel/django_hotel/media/base64.jpg")
 
         # save face_encoding into all_face_encodings variable
         all_face_encodings[str(room_obj.number)] = face_recognition.face_encodings(saved_image)[0]
@@ -228,10 +228,34 @@ def check_out(request):
             room_obj = Room.objects.get(number=data['room_num'], is_active=True)
             room_obj.is_active = False
             room_obj.save()
-            context = {
-            }
-            template = get_template( 'check_out_completed.html')
-            return HttpResponse(template.render(context,request)) 
+            all_face_encodings = {}
+            # if dataset_faces.dat exist, load saved encoding into all_face_encodings
+            try:
+                with open('/var/www/alehotel/django_hotel/media/dataset_faces.dat', 'rb') as f:
+                    openfile = pickle.load(f)
+                
+                for key in openfile:
+                    if key == str(room_obj.number):
+                        pass
+
+                    else:
+                        all_face_encodings[key] = openfile[key]   
+
+                # save updated encoding to dataset_faces.dat
+                with open('/var/www/alehotel/django_hotel/media/dataset_faces.dat', 'wb') as f:
+                    pickle.dump(all_face_encodings, f)  
+                    
+                context = {
+                }
+                template = get_template( 'check_out_completed.html')
+                return HttpResponse(template.render(context,request))                                   
+
+            except:
+                pass
+                context = {
+                }
+                template = get_template( 'check_out_completed.html')
+                return HttpResponse(template.render(context,request)) 
         except Room.DoesNotExist:
             context = {
             }                
@@ -244,13 +268,60 @@ def check_out(request):
         template = get_template( 'check_out.html')
         return HttpResponse(template.render(context,request))  
 
-
 def unlock_door(request):
 
     if request.META.get("HTTP_X_REQUESTED_WITH") == "XMLHttpRequest":
         data = json.load(request)
-        profile_image = data.get('imgBase64')
-        return JsonResponse({'status': "uploaded"})               
+        # save data to variable image
+        image = data.get('imgBase64')
+
+        # remove prefix to make image base64 encoding
+        profile_image = image.removeprefix("data:image/png;base64,")
+
+        # save image to file
+        imgdata = base64.b64decode(profile_image)
+        filename = '/var/www/alehotel/django_hotel/media/base64.jpg'  # I assume you have a way of picking unique filenames
+
+        # open image file
+        with open(filename, 'wb') as f:
+            f.write(imgdata)  
+
+        # defined all faces encoding dictionary            
+        all_face_encodings = {}
+        # convert image to face_encoding
+        saved_image = face_recognition.load_image_file("/var/www/alehotel/django_hotel/media/base64.jpg")
+
+        # if dataset_faces.dat exist, load saved encoding into all_face_encodings
+        try:
+            with open('/var/www/alehotel/django_hotel/media/dataset_faces.dat', 'rb') as f:
+                openfile = pickle.load(f)
+            
+            for key in openfile:
+                all_face_encodings[key] = openfile[key]       
+        except:
+            pass
+
+        known_face_names = list(all_face_encodings.keys())
+        known_face_encodings = np.array(list(all_face_encodings.values()))            
+
+        # Find all the faces and face encodings in the current frame of video
+        face_locations = face_recognition.face_locations(saved_image)
+        face_encodings = face_recognition.face_encodings(saved_image, face_locations)
+
+        face_names = []
+        for face_encoding in face_encodings:
+            # See if the face is a match for the known face(s)
+            matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+            name = "Unknown"
+            face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
+            best_match_index = np.argmin(face_distances)
+            if matches[best_match_index]:
+                name = known_face_names[best_match_index]
+                return JsonResponse({'status': name})  
+                # return JsonResponse({'status': "Not found"})               
+            else:
+                return JsonResponse({'status': "Not found"})               
+        return JsonResponse({'status': "Not found"})  
     else:
         context = {
         }
