@@ -343,8 +343,13 @@ def stringToRGB(base64_string):
 
 def stellar_login(request):
 
+    url = error_msg = None
+
     try:
-        error_msg = request.GET['error_msg']
+        error = request.GET['error']
+
+        if error == "1":
+            error_msg = "User not found or password incorrect"
 
     except:
         pass
@@ -379,12 +384,12 @@ def stellar_login(request):
     except:
         pass     
 
-    ap_login_url= "https://cportal.al-enterprise.com/login"
 
     context = {
-        "ap_login_url" : ap_login_url,
+        "ap_login_url" : "https://cportal.al-enterprise.com/login",
         "url" : url,
-        "onerror" : "https://cportal.al-enterprise.com/login?error=1"
+        "onerror" : "https://192.168.2.243/ale/login?error=1",
+        "error_msg" : error_msg
     }
     template = get_template( 'stellar_login.html')
     return HttpResponse(template.render(context,request))         
