@@ -7,3 +7,10 @@ class NasAdmin(admin.ModelAdmin):
     search_fields = ['nasname',]
 
 admin.site.register(Nas,NasAdmin)
+
+
+# class RadcheckAdmin(admin.ModelAdmin):
+#     list_display = ('username','attribute','op','value')
+#     search_fields = ['username',]
+
+# admin.site.register(Radcheck,RadcheckAdmin)
