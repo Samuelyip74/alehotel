@@ -9,6 +9,7 @@ from datetime import datetime
 from django.contrib.auth import authenticate,login
 from product.models import Product
 from reservation.models import Reservation
+from free_radius.models import Radcheck
 from room.models import Room
 import face_recognition
 from PIL import Image
@@ -172,9 +173,11 @@ def check_in_confirmation(request, pk):
         # remove prefix to make image base64 encoding
         profile_image = image.removeprefix("data:image/png;base64,")
         room_obj.is_active = True
+        room_obj.user = reserve_obj.user
         room_obj.save()
         reserve_obj.is_active = False
         reserve_obj.save()
+        rad_user = Radcheck.objects.create(username=str(room_obj.number), attribute="Cleartext-Password", op=":=", value="Yip")
 
         # save image to file
         imgdata = base64.b64decode(profile_image)
@@ -228,6 +231,8 @@ def check_out(request):
             room_obj = Room.objects.get(number=data['room_num'], is_active=True)
             room_obj.is_active = False
             room_obj.save()
+            rad_user = Radcheck.objects.get(username=data['room_num'])
+            rad_user.delete()
             all_face_encodings = {}
             # if dataset_faces.dat exist, load saved encoding into all_face_encodings
             try:
