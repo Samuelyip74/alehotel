@@ -3,7 +3,18 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path,include
 from django.urls import re_path as url
-from .views import index, booking, list_rooms, check_in, check_out, check_in_out, check_in_confirmation, check_in_completed, unlock_door
+from .views import (
+    index, 
+    booking, 
+    list_rooms, 
+    check_in, 
+    check_out, 
+    check_in_out, 
+    check_in_confirmation, 
+    check_in_completed, 
+    unlock_door,
+    stellar_login
+)
 
 urlpatterns = [
     path('booknow/<str:startdate>/<str:enddate>/<str:guest>/<int:pk>/', booking, name='booking'),
@@ -14,7 +25,9 @@ urlpatterns = [
     path('check_in/', check_in, name='check_in'),
     path('check_out/', check_out, name='check_out'),
     path('list/', list_rooms, name='listing'),
-    path('accounts/', include('allauth.urls')),    
+    path('accounts/', include('allauth.urls')),   
+    path('ale/login', stellar_login, name='stellar_login'), 
+
     path('admin/', admin.site.urls),
     url(r'^$', index, name='home'),
 ]

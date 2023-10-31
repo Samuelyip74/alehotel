@@ -338,4 +338,71 @@ def stringToRGB(base64_string):
     imgdata = base64.b64decode(str(base64_string))
     img = Image.open(io.BytesIO(imgdata))
     opencv_img = cv2.cvtColor(np.array(img), cv2.COLOR_BGR2RGB)
-    return opencv_img        
+    return opencv_img     
+
+
+def stellar_login(request):
+
+    if request.method == "POST":
+        data = request.POST.copy()
+        username = data['username']
+        password = data['password']
+        try:
+            rad_user = Radcheck.objects.get(username=username)
+            if (rad_user.value == password):
+                ap_login_url = "https://cportal.al-enterprise.com/login"
+                print("passed") 
+            else:
+                context = {
+                    "error_msg" : "User not found or incorrect password"
+                }
+                template = get_template( 'stellar_login.html')
+                return HttpResponse(template.render(context,request))               
+        except:
+            context = {
+                "error_msg" : "User not found or incorrect password"
+            }
+            template = get_template( 'stellar_login.html')
+            return HttpResponse(template.render(context,request))             
+
+
+
+
+    else:
+        try:
+            clientmac = request.GET['clientmac']
+        except:
+            pass
+
+        try:
+            clientip = request.GET['clientip']
+        except:
+            pass        
+
+        try:
+            switchmac = request.GET['switchmac']
+        except:
+            pass        
+
+        try:
+            switchip = request.GET['switchip']
+        except:
+            pass     
+
+        try:
+            ssid = request.GET['ssid']
+        except:
+            pass     
+
+        try:
+            url = request.GET['url']
+        except:
+            pass                      
+
+        context = {
+        }
+        template = get_template( 'stellar_login.html')
+        return HttpResponse(template.render(context,request))         
+
+    
+
