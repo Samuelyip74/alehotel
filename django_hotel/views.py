@@ -342,67 +342,45 @@ def stringToRGB(base64_string):
 
 
 def stellar_login(request):
+    try:
+        clientmac = request.GET['clientmac']
+    except:
+        pass
 
-    if request.method == "POST":
-        data = request.POST.copy()
-        username = data['username']
-        password = data['password']
-        try:
-            rad_user = Radcheck.objects.get(username=username)
-            if (rad_user.value == password):
-                ap_login_url = "https://cportal.al-enterprise.com/login"
-                print("passed") 
-            else:
-                context = {
-                    "error_msg" : "User not found or incorrect password"
-                }
-                template = get_template( 'stellar_login.html')
-                return HttpResponse(template.render(context,request))               
-        except:
-            context = {
-                "error_msg" : "User not found or incorrect password"
-            }
-            template = get_template( 'stellar_login.html')
-            return HttpResponse(template.render(context,request))             
+    try:
+        clientip = request.GET['clientip']
+    except:
+        pass        
 
+    try:
+        switchmac = request.GET['switchmac']
+    except:
+        pass        
 
+    try:
+        switchip = request.GET['switchip']
+    except:
+        pass     
 
+    try:
+        ssid = request.GET['ssid']
+    except:
+        pass     
 
-    else:
-        try:
-            clientmac = request.GET['clientmac']
-        except:
-            pass
+    try:
+        url = request.GET['url']
+    except:
+        pass     
 
-        try:
-            clientip = request.GET['clientip']
-        except:
-            pass        
+    ap_login_url= "https://cportal.al-enterprise.com/login"
 
-        try:
-            switchmac = request.GET['switchmac']
-        except:
-            pass        
-
-        try:
-            switchip = request.GET['switchip']
-        except:
-            pass     
-
-        try:
-            ssid = request.GET['ssid']
-        except:
-            pass     
-
-        try:
-            url = request.GET['url']
-        except:
-            pass                      
-
-        context = {
-        }
-        template = get_template( 'stellar_login.html')
-        return HttpResponse(template.render(context,request))         
+    context = {
+        "ap_login_url" : ap_login_url,
+        "url" : url,
+        "onerror" : "onerror"
+    }
+    template = get_template( 'stellar_login.html')
+    return HttpResponse(template.render(context,request))         
 
     
 
