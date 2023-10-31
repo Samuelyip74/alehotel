@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'room',
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',    
+    'allauth.socialaccount', 
+    'free_radius'
 ]
 
 MIDDLEWARE = [
