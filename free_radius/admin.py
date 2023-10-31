@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Nas
+from .models import Nas,Radcheck
 
 # Register your models here.
 class NasAdmin(admin.ModelAdmin):
@@ -9,8 +9,8 @@ class NasAdmin(admin.ModelAdmin):
 admin.site.register(Nas,NasAdmin)
 
 
-# class RadcheckAdmin(admin.ModelAdmin):
-#     list_display = ('username','attribute','op','value')
-#     search_fields = ['username',]
+class RadcheckAdmin(admin.ModelAdmin):
+    list_display = ('username','attribute','op','value')
+    search_fields = ['username',]
 
-# admin.site.register(Radcheck,RadcheckAdmin)
+admin.site.register(Radcheck,RadcheckAdmin)

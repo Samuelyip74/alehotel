@@ -61,15 +61,15 @@ class Radcheck(models.Model):
         db_table = 'radcheck'
 
 
-# class Radgroupcheck(models.Model):
-#     groupname = models.CharField(max_length=64)
-#     attribute = models.CharField(max_length=64)
-#     op = models.CharField(max_length=2)
-#     value = models.CharField(max_length=253)
+class Radgroupcheck(models.Model):
+    groupname = models.CharField(max_length=64)
+    attribute = models.CharField(max_length=64)
+    op = models.CharField(max_length=2)
+    value = models.CharField(max_length=253)
 
-#     class Meta:
-#         managed = True
-#         db_table = 'radgroupcheck'
+    class Meta:
+        managed = True
+        db_table = 'radgroupcheck'
 
 
 class Radgroupreply(models.Model):
