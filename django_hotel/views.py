@@ -342,6 +342,13 @@ def stringToRGB(base64_string):
 
 
 def stellar_login(request):
+
+    try:
+        error_msg = request.GET['error_msg']
+
+    except:
+        pass
+    
     try:
         clientmac = request.GET['clientmac']
     except:
@@ -377,7 +384,7 @@ def stellar_login(request):
     context = {
         "ap_login_url" : ap_login_url,
         "url" : url,
-        "onerror" : "onerror"
+        "onerror" : "https://cportal.al-enterprise.com/login?error=1"
     }
     template = get_template( 'stellar_login.html')
     return HttpResponse(template.render(context,request))         
