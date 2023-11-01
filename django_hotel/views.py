@@ -342,57 +342,87 @@ def stringToRGB(base64_string):
 
 
 def stellar_login(request):
-
     url = error_msg = None
 
-    try:
-        error = request.GET['error']
+    if request.method == "POST":
+        data = request.POST.copy()
+        username = data['user']
+        password = data['password']
+        url = data['url']
 
-        if error == "1":
+
+        try:
+            rad_obj = Radcheck.objects.get(username=username)
+            if (rad_obj.value == password):
+                context = {
+                    "username" : username,
+                    "password" : password,
+                    "ap_login_url" : "https://cportal.al-enterprise.com/login",
+                    "url" : url,
+                    "onerror" : "https://192.168.2.243/ale/login?error=1",
+                }
+                template = get_template( 'auto_login.html')
+                return HttpResponse(template.render(context,request))                  
+        except:
             error_msg = "User not found or password incorrect"
+            context = {
+                "ap_login_url" : "https://cportal.al-enterprise.com/login",
+                "url" : url,
+                "onerror" : "https://192.168.2.243/ale/login?error=1",
+                "error_msg" : error_msg
+            }
+            template = get_template( 'stellar_login.html')
+            return HttpResponse(template.render(context,request))   
 
-    except:
-        pass
-    
-    try:
-        clientmac = request.GET['clientmac']
-    except:
-        pass
+    else:
+        try:
+            error = request.GET['error']
 
-    try:
-        clientip = request.GET['clientip']
-    except:
-        pass        
+            if error == "1":
+                error_msg = "User not found or password incorrect"
 
-    try:
-        switchmac = request.GET['switchmac']
-    except:
-        pass        
+        except:
+            pass
+        
+        try:
+            clientmac = request.GET['clientmac']
+        except:
+            pass
 
-    try:
-        switchip = request.GET['switchip']
-    except:
-        pass     
+        try:
+            clientip = request.GET['clientip']
+        except:
+            pass        
 
-    try:
-        ssid = request.GET['ssid']
-    except:
-        pass     
+        try:
+            switchmac = request.GET['switchmac']
+        except:
+            pass        
 
-    try:
-        url = request.GET['url']
-    except:
-        pass     
+        try:
+            switchip = request.GET['switchip']
+        except:
+            pass     
+
+        try:
+            ssid = request.GET['ssid']
+        except:
+            pass     
+
+        try:
+            url = request.GET['url']
+        except:
+            pass     
 
 
-    context = {
-        "ap_login_url" : "https://cportal.al-enterprise.com/login",
-        "url" : url,
-        "onerror" : "https://192.168.2.243/ale/login?error=1",
-        "error_msg" : error_msg
-    }
-    template = get_template( 'stellar_login.html')
-    return HttpResponse(template.render(context,request))         
+        context = {
+            "ap_login_url" : "https://cportal.al-enterprise.com/login",
+            "url" : url,
+            "onerror" : "https://192.168.2.243/ale/login?error=1",
+            "error_msg" : error_msg
+        }
+        template = get_template( 'stellar_login.html')
+        return HttpResponse(template.render(context,request))         
 
     
 
