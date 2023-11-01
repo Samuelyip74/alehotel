@@ -177,7 +177,7 @@ def check_in_confirmation(request, pk):
         room_obj.save()
         reserve_obj.is_active = False
         reserve_obj.save()
-        rad_user = Radcheck.objects.create(username=str(room_obj.number), attribute="Cleartext-Password", op=":=", value="Yip")
+        rad_user = Radcheck.objects.create(username=str(room_obj.number), attribute="Cleartext-Password", op=":=", value=reserve_obj.user.last_name)
 
         # save image to file
         imgdata = base64.b64decode(profile_image)
@@ -231,8 +231,11 @@ def check_out(request):
             room_obj = Room.objects.get(number=data['room_num'], is_active=True)
             room_obj.is_active = False
             room_obj.save()
-            rad_user = Radcheck.objects.get(username=data['room_num'])
-            rad_user.delete()
+            try:
+                rad_user = Radcheck.objects.get(username=data['room_num'])
+                rad_user.delete()
+            except:
+                pass
             all_face_encodings = {}
             # if dataset_faces.dat exist, load saved encoding into all_face_encodings
             try:
