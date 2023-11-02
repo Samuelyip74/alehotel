@@ -351,7 +351,10 @@ def stellar_login(request):
         data = request.POST.copy()
         username = data['user']
         password = data['password']
-        url = data['url']
+        try:
+            url = data['url']
+        except:
+            pass
 
 
         try:
@@ -421,11 +424,92 @@ def stellar_login(request):
         context = {
             "ap_login_url" : "https://cportal.al-enterprise.com/login",
             "url" : url,
-            "onerror" : "https://192.168.2.243/ale/login?error=1",
+            "onerror" : "https://alehotel.sg.privatedns.org/ale/login?error=1",
             "error_msg" : error_msg
         }
         template = get_template( 'stellar_login.html')
         return HttpResponse(template.render(context,request))         
 
-    
+def stellar_login_face(request):
+    url = error_msg = None
+    try:
+        url = request.GET['url']
+    except:
+        pass     
 
+    if request.META.get("HTTP_X_REQUESTED_WITH") == "XMLHttpRequest":
+        data = json.load(request)
+        # save data to variable image
+        image = data.get('imgBase64')
+
+        # remove prefix to make image base64 encoding
+        profile_image = image.removeprefix("data:image/png;base64,")
+
+        # save image to file
+        imgdata = base64.b64decode(profile_image)
+        filename = '/var/www/alehotel/django_hotel/media/base64.jpg'  # I assume you have a way of picking unique filenames
+
+        # open image file
+        with open(filename, 'wb') as f:
+            f.write(imgdata)  
+
+        # defined all faces encoding dictionary            
+        all_face_encodings = {}
+        # convert image to face_encoding
+        saved_image = face_recognition.load_image_file("/var/www/alehotel/django_hotel/media/base64.jpg")
+
+        # if dataset_faces.dat exist, load saved encoding into all_face_encodings
+        try:
+            with open('/var/www/alehotel/django_hotel/media/dataset_faces.dat', 'rb') as f:
+                openfile = pickle.load(f)
+            
+            for key in openfile:
+                all_face_encodings[key] = openfile[key]       
+        except:
+            pass
+
+        known_face_names = list(all_face_encodings.keys())
+        known_face_encodings = np.array(list(all_face_encodings.values()))            
+
+        # Find all the faces and face encodings in the current frame of video
+        face_locations = face_recognition.face_locations(saved_image)
+        face_encodings = face_recognition.face_encodings(saved_image, face_locations)
+
+        face_names = []
+        for face_encoding in face_encodings:
+            # See if the face is a match for the known face(s)
+            matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+            name = "Unknown"
+            face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
+            best_match_index = np.argmin(face_distances)
+            if matches[best_match_index]:
+                name = known_face_names[best_match_index]
+                try:
+                    rad_obj = Radcheck.objects.get(username=name)
+                    data = '<h1 id="replace">'
+                    data += '<input name="user" type="text" class="form-control" value="' + rad_obj.username + '">'
+                    data += '<input name="password" type="password" class="form-control" value="'+ rad_obj.value + '">'
+                    data += '<button id="auto-login" type="submit" class="btn btn-primary btn-lg" style="margin-top:1em;">Login</button>'
+                    data +=  '</h1>'
+                    return JsonResponse({ 'status' : data})                      
+                except:
+                    data = '<h1 id="replace">'
+                    data += 'Please wait ...'
+                    data +=  '</h1>'
+                    return JsonResponse({ 'status' : data})                      
+
+                data = '<h1 id="replace">'
+                data += 'Please wait ...'
+                data +=  '</h1>'
+                return JsonResponse({ 'status' : data})  
+            else:
+                data = '<h1 id = "replace">'
+                data += 'Please wait ...'
+                data +=  '</h1>'
+                return JsonResponse({ 'status' : data})  
+        return JsonResponse({'status': "Not found"})  
+    else:
+        context = {
+        }
+        template = get_template( 'stellar_login_face.html')
+        return HttpResponse(template.render(context,request))              

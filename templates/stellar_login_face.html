@@ -10,7 +10,7 @@ align-items: center;">
     <div class="px-4 py-5 my-5 text-center">
         <div class="row">
           <div class="contentarea">
-            <h1>Look into the Webcam to unlock your door</h1>
+            <h1>Look into the Webcam to authenticate</h1>
             <div class="camera" id="camera" style="margin-top:2em">
               <video id="video">Video stream not available.</video>
             </div>
@@ -23,8 +23,11 @@ align-items: center;">
         <div class="row">
           <div class="col-sm">
             <div class="row" style="margin:2em;">
-              <div class="col-sm-4" style="margin:auto">
-                <h1 id = "replace">Door Close</h1>
+              <div class="col-sm-4" style="display:None;margin:auto">
+                <form action="https://cportal.al-enterprise.com/login" method="post">
+                  <input name="url" type="text" class="form-control" value="{{ url }}" hidden>
+                  <h1 id = "replace">Please wait...</h1>
+                </form>
                </div>
             </div>            
             <div class="row" style="margin:2em;">
@@ -160,21 +163,17 @@ align-items: center;">
       photo.setAttribute("src", data);
 
       $.ajax({
-        url: "https://alehotel.sg.privatedns.org/unlock_door/",
+        url: "https://alehotel.sg.privatedns.org/ale/face/login",
         type: "POST",
         dataType: "json",
         data: JSON.stringify({imgBase64: data,}),
         headers: { 'X-CSRFToken' : '{{ csrf_token }}' }, 
         success: (data) => {
-          if (data['status'] === 'Not found'){
-              let str = '<h1 id = "replace">Door Close</h1>';
+          if (data){
+              let str = data['status'];
               var Obj = document.getElementById('replace'); 
               Obj.outerHTML = str ;
-          }
-          else {
-            let str = '<h1 id = "replace">Door Open</h1>';
-              var Obj = document.getElementById('replace'); 
-              Obj.outerHTML = str ;
+              document.getElementById('auto-login').click();
           }
         },
         error: (error) => {
