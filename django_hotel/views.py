@@ -138,6 +138,13 @@ def check_in_out(request):
     return HttpResponse(template.render(context,request))  
 
 def check_in(request):
+
+    if request.method == "GET":
+        context = {
+        }        
+        template = get_template( 'check_in.html')
+        return HttpResponse(template.render(context,request))  
+
     if request.method == "POST":
         data = request.POST.copy()
         try:
@@ -152,12 +159,6 @@ def check_in(request):
             }                
             template = get_template( 'no_reservation_found.html')
             return HttpResponse(template.render(context,request))                    
-
-    else:
-        context = {
-        }        
-        template = get_template( 'check_in.html')
-        return HttpResponse(template.render(context,request))  
 
 def check_in_confirmation(request, pk):
     
