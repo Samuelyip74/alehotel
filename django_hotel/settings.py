@@ -162,3 +162,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CSRF_TRUSTED_ORIGINS = ['https://192.168.2.243']
 CORS_ORIGIN_ALLOW_ALL = True
 
+LOGIN_REDIRECT_URL = '/'
