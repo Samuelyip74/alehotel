@@ -129,7 +129,6 @@ def booking(request, startdate, enddate, guest, pk):
         template = get_template( 'booking_confirmation.html')
         return HttpResponse(template.render(context,request))  
 
-
 def check_in_out(request):
     context = {
 
@@ -161,63 +160,73 @@ def check_in(request):
             return HttpResponse(template.render(context,request))                    
 
 def check_in_confirmation(request, pk):
-    
-    reserve_obj = Reservation.objects.get(id=pk)
-    room_obj = Room.objects.filter(room_type__name__contains = reserve_obj.room.name, is_active=False)[:1].get()
+    room_obj = None
+    if request.method == "GET":
 
-    if request.META.get("HTTP_X_REQUESTED_WITH") == "XMLHttpRequest":
-        data = json.load(request)
-
-        # save data to variable image
-        image = data.get('imgBase64')
-
-        # remove prefix to make image base64 encoding
-        profile_image = image.removeprefix("data:image/png;base64,")
-        room_obj.is_active = True
-        room_obj.user = reserve_obj.user
-        room_obj.save()
-        reserve_obj.is_active = False
-        reserve_obj.save()
-        rad_user = Radcheck.objects.create(username=str(room_obj.number), attribute="Cleartext-Password", op=":=", value=reserve_obj.user.last_name)
-
-        # save image to file
-        imgdata = base64.b64decode(profile_image)
-        filename = '/var/www/alehotel/django_hotel/media/base64.jpg'  # I assume you have a way of picking unique filenames
-
-        # open image file
-        with open(filename, 'wb') as f:
-            f.write(imgdata)  
-
-        # defined all faces encoding dictionary            
-        all_face_encodings = {}
-
-        # if dataset_faces.dat exist, load saved encoding into all_face_encodings
         try:
-            with open('/var/www/alehotel/django_hotel/media/dataset_faces.dat', 'rb') as f:
-                openfile = pickle.load(f)
-            
-            for key in openfile:
-                all_face_encodings[key] = openfile[key]       
+            reserve_obj = Reservation.objects.get(id=pk)
+            room_obj = Room.objects.filter(room_type__name__contains = reserve_obj.room.name, is_active=False)[:1].get()
         except:
             pass
 
-        # convert image to face_encoding
-        saved_image = face_recognition.load_image_file("/var/www/alehotel/django_hotel/media/base64.jpg")
-
-        # save face_encoding into all_face_encodings variable
-        all_face_encodings[str(room_obj.number)] = face_recognition.face_encodings(saved_image)[0]
-
-        # save updated encoding to dataset_faces.dat
-        with open('/var/www/alehotel/django_hotel/media/dataset_faces.dat', 'wb') as f:
-            pickle.dump(all_face_encodings, f)
-
-        return JsonResponse({'status': "uploaded"})               
-    else:
         context = {
             "room_obj": room_obj
         }
         template = get_template( 'room_confirmation.html')
-        return HttpResponse(template.render(context,request))  
+        return HttpResponse(template.render(context,request))              
+
+    if request.method == "POST":
+        if request.META.get("HTTP_X_REQUESTED_WITH") == "XMLHttpRequest":
+            data = json.load(request)
+
+            # save data to variable image
+            image = data.get('imgBase64')
+            room_num = data.get('room')
+            reserve_obj = Reservation.objects.get(id=pk)
+            room_obj = Room.objects.filter(room_type__name__contains = reserve_obj.room.name, is_active=False)[:1].get()
+
+
+            # remove prefix to make image base64 encoding
+            profile_image = image.removeprefix("data:image/png;base64,")
+            room_obj.is_active = True
+            room_obj.user = reserve_obj.user
+            room_obj.save()
+            reserve_obj.is_active = False
+            reserve_obj.save()
+            rad_user = Radcheck.objects.create(username=str(room_obj.number), attribute="Cleartext-Password", op=":=", value=reserve_obj.user.last_name)
+
+            # save image to file
+            imgdata = base64.b64decode(profile_image)
+            filename = '/var/www/alehotel/django_hotel/media/base64.jpg'  # I assume you have a way of picking unique filenames
+
+            # open image file
+            with open(filename, 'wb') as f:
+                f.write(imgdata)  
+
+            # defined all faces encoding dictionary            
+            all_face_encodings = {}
+
+            # if dataset_faces.dat exist, load saved encoding into all_face_encodings
+            try:
+                with open('/var/www/alehotel/django_hotel/media/dataset_faces.dat', 'rb') as f:
+                    openfile = pickle.load(f)
+                
+                for key in openfile:
+                    all_face_encodings[key] = openfile[key]       
+            except:
+                pass
+
+            # convert image to face_encoding
+            saved_image = face_recognition.load_image_file("/var/www/alehotel/django_hotel/media/base64.jpg")
+
+            # save face_encoding into all_face_encodings variable
+            all_face_encodings[str(room_obj.number)] = face_recognition.face_encodings(saved_image)[0]
+
+            # save updated encoding to dataset_faces.dat
+            with open('/var/www/alehotel/django_hotel/media/dataset_faces.dat', 'wb') as f:
+                pickle.dump(all_face_encodings, f)
+
+            return JsonResponse({'status': "uploaded"})               
 
 def check_in_completed(request):
     context = {
@@ -337,13 +346,11 @@ def unlock_door(request):
         template = get_template( 'unlock_room.html')
         return HttpResponse(template.render(context,request))          
 
-
 def stringToRGB(base64_string):
     imgdata = base64.b64decode(str(base64_string))
     img = Image.open(io.BytesIO(imgdata))
     opencv_img = cv2.cvtColor(np.array(img), cv2.COLOR_BGR2RGB)
     return opencv_img     
-
 
 def stellar_login(request):
     url = error_msg = None

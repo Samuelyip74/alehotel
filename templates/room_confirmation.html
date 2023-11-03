@@ -175,7 +175,10 @@ align-items: center;">
       $.ajax({
         type: "POST",
         dataType: "json",
-        data: JSON.stringify({imgBase64: data,}),
+        data: JSON.stringify({
+          imgBase64: data,
+          room: {{room_obj.number}},
+        }),
         headers: { 'X-CSRFToken' : '{{ csrf_token }}' }, 
         success: (data) => {
           if (data['status'] == 'uploaded'){
