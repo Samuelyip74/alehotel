@@ -5,10 +5,9 @@
 <div class="container" style="min-height:100vh">
     <div class="row">
         <div class="px-4 py-5 my-5 text-center">
-
             <div class="row">
                 <div class="col-sm-6" style="margin:auto;padding-top:2em;">         
-                    <span style="font-size: x-large;">Please wait while we redirect you</span>
+                    <span style="font-size: x-large;">Authenticated! Redirecting to {{ url }}</span>
                     <div class="container" style="display: None;margin-top: 1em;">
                       <form action="{{ ap_login_url }}" method="post">
                         {% if url %}
@@ -39,9 +38,9 @@
                               <button id="auto-login" type="submit" class="btn btn-primary btn-lg" style="margin-top:1em;">Login</button>
                             </div>
                             <script type="text/javascript">
-                            window.onload = function(){
+                            setInterval(function() {
                               document.getElementById('auto-login').click();
-                            }
+                            }, 3000);
                               </script>
                           </div>
                         </div>
@@ -51,7 +50,5 @@
               </div>            
         </div>
     </div>
-
-   
   </div>
 {% endblock %}

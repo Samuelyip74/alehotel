@@ -353,42 +353,10 @@ def stringToRGB(base64_string):
     return opencv_img     
 
 def stellar_login(request):
-    url = error_msg = None
+    ssid = switchip = switchmac = clientip = clientmac = error = error_msg = None
+    url = "http://www.al-enterprise.com"
 
-    if request.method == "POST":
-        data = request.POST.copy()
-        username = data['user']
-        password = data['password']
-        try:
-            url = data['url']
-        except:
-            pass
-
-
-        try:
-            rad_obj = Radcheck.objects.get(username=username)
-            if (rad_obj.value == password):
-                context = {
-                    "username" : username,
-                    "password" : password,
-                    "ap_login_url" : "https://cportal.al-enterprise.com/login",
-                    "url" : url,
-                    "onerror" : "https://192.168.2.243/ale/login?error=1",
-                }
-                template = get_template( 'auto_login.html')
-                return HttpResponse(template.render(context,request))                  
-        except:
-            error_msg = "User not found or password incorrect"
-            context = {
-                "ap_login_url" : "https://cportal.al-enterprise.com/login",
-                "url" : url,
-                "onerror" : "https://192.168.2.243/ale/login?error=1",
-                "error_msg" : error_msg
-            }
-            template = get_template( 'stellar_login.html')
-            return HttpResponse(template.render(context,request))   
-
-    else:
+    if request.method == "GET":
         try:
             error = request.GET['error']
 
@@ -431,15 +399,64 @@ def stellar_login(request):
 
         context = {
             "ap_login_url" : "https://cportal.al-enterprise.com/login",
+            "switchip" : switchip,
+            "ssid": ssid,
+            "switchmac" : switchmac,
+            "clientip" : clientip,
+            "clientmac" : clientmac,
             "url" : url,
-            "onerror" : "https://alehotel.sg.privatedns.org/ale/login?error=1",
+            "onerror" : "https://alehotel.dyndns-ip.com/ale/login?error=1",
             "error_msg" : error_msg
         }
         template = get_template( 'stellar_login.html')
-        return HttpResponse(template.render(context,request))         
+        return HttpResponse(template.render(context,request))  
+
+    if request.method == "POST":
+        data = request.POST.copy()
+        username = data['user']
+        password = data['password']
+        try:
+            url = data['url']
+        except:
+            pass
+
+        try:
+            rad_obj = Radcheck.objects.get(username=username)
+            if (rad_obj.value == password):
+                context = {
+                    "username" : username,
+                    "password" : password,
+                    "ap_login_url" : "https://cportal.al-enterprise.com/login",
+                    "url" : url,
+                    "onerror" : "https://alehotel.dyndns-ip.com/ale/login?error=1",
+                }
+                template = get_template( 'auto_login.html')
+                return HttpResponse(template.render(context,request)) 
+            else:
+                context = {
+                    "ap_login_url" : "https://cportal.al-enterprise.com/login",
+                    "url" : url,
+                    "onerror" : "https://alehotel.dyndns-ip.com/ale/login?error=1",
+                    "error_msg" : error_msg
+                }
+                template = get_template( 'stellar_login.html')
+                return HttpResponse(template.render(context,request))                   
+        except:
+            error_msg = "User not found or password incorrect"
+            context = {
+                "ap_login_url" : "https://cportal.al-enterprise.com/login",
+                "url" : url,
+                "onerror" : "https://192.168.2.243/ale/login?error=1",
+                "error_msg" : error_msg
+            }
+            template = get_template( 'stellar_login.html')
+            return HttpResponse(template.render(context,request))   
+
+       
 
 def stellar_login_face(request):
-    url = error_msg = None
+    error_msg = None
+    url = "http://www.al-enterprise.com"
     try:
         url = request.GET['url']
     except:
