@@ -160,7 +160,7 @@ align-items: center;">
       photo.setAttribute("src", data);
 
       $.ajax({
-        url: "https://alehotel.sg.privatedns.org/unlock_door/",
+        url: "https://alehotel.dyndns-ip.com/unlock_door/",
         type: "POST",
         dataType: "json",
         data: JSON.stringify({imgBase64: data,}),

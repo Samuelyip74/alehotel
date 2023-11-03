@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-s4sv!a(puv-6=t#d$7+ku@*2c0n9&!f2@^c68=c-1-fk)9$e%c
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.2.243', 'alehotel.sg.privatedns.org']
+ALLOWED_HOSTS = ['192.168.2.243', 'alehotel.sg.privatedns.org', 'alehotel.dyndns-ip.com', '157.120.240.204']
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
