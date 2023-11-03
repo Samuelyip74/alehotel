@@ -6,42 +6,33 @@
 <div class="px-4 py-5 my-5 text-center" style="min-height:40vh;">
     <h1 class="display-5 fw-bold" style="margin:1em;">Room Reservation</h1>
     <div class="container">
-        <table class="table table-striped">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Room</th>
-                <th scope="col">Start date</th>
-                <th scope="col">End date</th>
-                <th scope="col">Duration</th>
-                <th scope="col">No. of Guest</th>
-                <th scope="col">Total</th>
-
-              </tr>
-            </thead>
+      <div class="row">
+        <div class="col-sm-6" style="margin:auto">
+          <table class="table table-striped">
             <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>{{ product_obj.name }}</td>
-                <td>{{ startdate|date:'d-m-Y' }}</td>
-                <td>{{ enddate|date:'d-m-Y' }}</td>
-                <td>{{ duration }}</td>
-                <td>{{ guest }}</td>
-                <td>${{ t_price }}</td>
-              </tr>
-            </tbody>
+              <tr><td>Room Type</td><td>{{ product_obj.name }}}</td></tr>
+              <tr><td>From</td><td>{{ startdate|date:'d-m-Y' }}</td></tr>
+              <tr><td>To</td><td>{{ enddate|date:'d-m-Y' }}</td></tr>
+              <tr><td>Duration</td><td>{{ duration }}</td></tr>
+              <tr><td>Guest</td><td>{{ guest }}</td></tr>
+              <tr><td>Total Price</td><td>${{ t_price }}</td></tr>
+            </tbody>  
           </table>
+        </div>
 
+      </div>
+      <div class="row">
         <form action="" method="post">
-            {% csrf_token %}
-            <input name="start-date" type="date" class="form-control" value={{startdate}} hidden>
-            <input name="end-date" type="date" class="form-control" value={{enddate}} hidden>
-            <input name="guest" type="date" class="form-control" value={{guest}} hidden>
-            <input name="product_id" type="date" class="form-control" value={{product_obj.id}} hidden>
-            <button type="submit" name="confirm" class="btn btn-primary btn-lg" style="margin-top:1em;" value="ok">Confirm</button>
-            <a href="{% url 'home' %}" class="btn btn-secondary btn-lg" style="margin-top:1em;">Cancel</a>
+          {% csrf_token %}
+          <input name="start-date" type="date" class="form-control" value={{startdate}} hidden>
+          <input name="end-date" type="date" class="form-control" value={{enddate}} hidden>
+          <input name="guest" type="date" class="form-control" value={{guest}} hidden>
+          <input name="product_id" type="date" class="form-control" value={{product_obj.id}} hidden>
+          <button type="submit" name="confirm" class="btn btn-primary btn-lg" style="margin-top:1em;" value="ok">Confirm</button>
+          <a href="{% url 'home' %}" class="btn btn-secondary btn-lg" style="margin-top:1em;">Cancel</a>
 
-        </form>
+      </form>
+      </div>
     </div>
 </div>
 {% else %}
