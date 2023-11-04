@@ -419,6 +419,9 @@ def stellar_login(request):
         data = request.POST.copy()
         username = data['user']
         password = data['password']
+        clientmac = data['clientmac']
+        clientmac = re.sub(u'[:]', '', clientmac)
+        clientmac = clientmac.upper()        
         try:
             url = data['url']
         except:
@@ -426,6 +429,17 @@ def stellar_login(request):
 
         try:
             rad_obj = Radcheck.objects.get(username=username)
+            try:
+                Radcheck.objects.filter(username=clientmac).delete()
+            except:
+                pass
+            Radcheck.objects.create(
+                username=clientmac,
+                attribute="Cleartext-Password", 
+                op=":=", 
+                value=clientmac,
+                room=rad_obj.room                            
+            )            
             if (rad_obj.value == password):
                 context = {
                     "username" : username,

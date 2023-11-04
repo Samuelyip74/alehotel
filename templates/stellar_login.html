@@ -15,6 +15,9 @@
                         {% if url %}
                             <input name="url" type="text" class="form-control" value="{{ url }}" hidden>
                         {% endif %}
+                        {% if clientmac %}
+                            <input name="clientmac" type="text" class="form-control" value="{{ clientmac }}" hidden>
+                        {% endif %}                        
                         {% if onerror %}
                             <input name="onerror" type="text" class="form-control" value="{{ onerror }}" hidden>
                         {% endif %}                        
