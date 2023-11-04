@@ -1,4 +1,5 @@
 from django.db import models
+from room.models import Room
 
 # Create your models here.
 class Nas(models.Model):
@@ -55,6 +56,8 @@ class Radcheck(models.Model):
     attribute = models.CharField(max_length=64)
     op = models.CharField(max_length=2)
     value = models.CharField(max_length=253)
+    room  = models.ForeignKey(Room,null=True, blank=True,on_delete=models.CASCADE,unique=False)
+
 
     class Meta:
         managed = True

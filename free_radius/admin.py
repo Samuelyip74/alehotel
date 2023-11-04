@@ -10,7 +10,7 @@ admin.site.register(Nas,NasAdmin)
 
 
 class RadcheckAdmin(admin.ModelAdmin):
-    list_display = ('username','attribute','op','value')
+    list_display = ('username','attribute','op','value', 'room')
     search_fields = ['username',]
 
 admin.site.register(Radcheck,RadcheckAdmin)

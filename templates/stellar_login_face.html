@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block content %}
-
 <link rel="stylesheet" href="{% static 'css/video.css' %}"/>
 <div class="container" style="margin:auto;width:50%;min-height: 80vh; display: flex;
 justify-content: center;
@@ -161,12 +160,17 @@ align-items: center;">
 
       const data = canvas.toDataURL("image/png");
       photo.setAttribute("src", data);
+      var clientmac_value = "{{ clientmac }}";
 
       $.ajax({
         url: "https://alehotel.dyndns-ip.com/ale/face/login",
         type: "POST",
         dataType: "json",
-        data: JSON.stringify({imgBase64: data,}),
+        data: JSON.stringify(
+          {
+            clientmac: clientmac_value,
+            imgBase64: data,
+          }),
         headers: { 'X-CSRFToken' : '{{ csrf_token }}' }, 
         success: (data) => {
           if (data){

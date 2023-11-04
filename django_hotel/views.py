@@ -5,6 +5,7 @@ import string
 import random
 import os
 import json
+import re
 from datetime import datetime
 from django.contrib.auth import authenticate,login
 from product.models import Product
@@ -193,7 +194,11 @@ def check_in_confirmation(request, pk):
             room_obj.save()
             reserve_obj.is_active = False
             reserve_obj.save()
-            rad_user = Radcheck.objects.create(username=str(room_obj.number), attribute="Cleartext-Password", op=":=", value=reserve_obj.user.last_name)
+            rad_user = Radcheck.objects.create(username=str(room_obj.number), 
+                attribute="Cleartext-Password", 
+                op=":=", 
+                value=reserve_obj.user.last_name,
+                room=room_obj)
 
             # save image to file
             imgdata = base64.b64decode(profile_image)
@@ -242,8 +247,7 @@ def check_out(request):
             room_obj.is_active = False
             room_obj.save()
             try:
-                rad_user = Radcheck.objects.get(username=data['room_num'])
-                rad_user.delete()
+                Radcheck.objects.filter(room=room_obj).delete()
             except:
                 pass
             all_face_encodings = {}
@@ -455,86 +459,154 @@ def stellar_login(request):
        
 
 def stellar_login_face(request):
+    ssid = switchip = switchmac = clientip = clientmac = error = error_msg = None
     error_msg = None
     url = "http://www.al-enterprise.com"
-    try:
-        url = request.GET['url']
-    except:
-        pass     
 
-    if request.META.get("HTTP_X_REQUESTED_WITH") == "XMLHttpRequest":
-        data = json.load(request)
-        # save data to variable image
-        image = data.get('imgBase64')
-
-        # remove prefix to make image base64 encoding
-        profile_image = image.removeprefix("data:image/png;base64,")
-
-        # save image to file
-        imgdata = base64.b64decode(profile_image)
-        filename = '/var/www/alehotel/django_hotel/media/base64.jpg'  # I assume you have a way of picking unique filenames
-
-        # open image file
-        with open(filename, 'wb') as f:
-            f.write(imgdata)  
-
-        # defined all faces encoding dictionary            
-        all_face_encodings = {}
-        # convert image to face_encoding
-        saved_image = face_recognition.load_image_file("/var/www/alehotel/django_hotel/media/base64.jpg")
-
-        # if dataset_faces.dat exist, load saved encoding into all_face_encodings
+    if request.method == "GET":
         try:
-            with open('/var/www/alehotel/django_hotel/media/dataset_faces.dat', 'rb') as f:
-                openfile = pickle.load(f)
-            
-            for key in openfile:
-                all_face_encodings[key] = openfile[key]       
+            error = request.GET['error']
+
+            if error == "1":
+                error_msg = "User not found or password incorrect"
+
+        except:
+            pass
+        
+        try:
+            clientmac = request.GET['clientmac']
         except:
             pass
 
-        known_face_names = list(all_face_encodings.keys())
-        known_face_encodings = np.array(list(all_face_encodings.values()))            
+        try:
+            clientip = request.GET['clientip']
+        except:
+            pass        
 
-        # Find all the faces and face encodings in the current frame of video
-        face_locations = face_recognition.face_locations(saved_image)
-        face_encodings = face_recognition.face_encodings(saved_image, face_locations)
+        try:
+            switchmac = request.GET['switchmac']
+        except:
+            pass        
 
-        face_names = []
-        for face_encoding in face_encodings:
-            # See if the face is a match for the known face(s)
-            matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
-            name = "Unknown"
-            face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
-            best_match_index = np.argmin(face_distances)
-            if matches[best_match_index]:
-                name = known_face_names[best_match_index]
-                try:
-                    rad_obj = Radcheck.objects.get(username=name)
-                    data = '<h1 id="replace">'
-                    data += '<input name="user" type="text" class="form-control" value="' + rad_obj.username + '">'
-                    data += '<input name="password" type="password" class="form-control" value="'+ rad_obj.value + '">'
-                    data += '<button id="auto-login" type="submit" class="btn btn-primary btn-lg" style="margin-top:1em;">Login</button>'
-                    data +=  '</h1>'
-                    return JsonResponse({ 'status' : data})                      
-                except:
+        try:
+            switchip = request.GET['switchip']
+        except:
+            pass     
+
+        try:
+            ssid = request.GET['ssid']
+        except:
+            pass     
+
+        try:
+            url = request.GET['url']
+        except:
+            pass     
+
+
+        context = {
+            "ap_login_url" : "https://cportal.al-enterprise.com/login",
+            "switchip" : switchip,
+            "ssid": ssid,
+            "switchmac" : switchmac,
+            "clientip" : clientip,
+            "clientmac" : clientmac,
+            "url" : url,
+            "onerror" : "https://alehotel.dyndns-ip.com/ale/login?error=1",
+            "error_msg" : error_msg
+        }
+
+        template = get_template( 'stellar_login_face.html')
+        return HttpResponse(template.render(context,request))            
+    
+    if request.method == "POST":
+
+        if request.META.get("HTTP_X_REQUESTED_WITH") == "XMLHttpRequest":
+            data = json.load(request)
+            # save data to variable image
+            image = data.get('imgBase64')
+            clientmac = data.get('clientmac')
+            clientmac = re.sub(u'[:]', '', clientmac)
+            clientmac = clientmac.upper()
+            # remove prefix to make image base64 encoding
+            profile_image = image.removeprefix("data:image/png;base64,")
+
+            # save image to file
+            imgdata = base64.b64decode(profile_image)
+            filename = '/var/www/alehotel/django_hotel/media/base64.jpg'  # I assume you have a way of picking unique filenames
+
+            # open image file
+            with open(filename, 'wb') as f:
+                f.write(imgdata)  
+
+            # defined all faces encoding dictionary            
+            all_face_encodings = {}
+            # convert image to face_encoding
+            saved_image = face_recognition.load_image_file("/var/www/alehotel/django_hotel/media/base64.jpg")
+
+            # if dataset_faces.dat exist, load saved encoding into all_face_encodings
+            try:
+                with open('/var/www/alehotel/django_hotel/media/dataset_faces.dat', 'rb') as f:
+                    openfile = pickle.load(f)
+                
+                for key in openfile:
+                    all_face_encodings[key] = openfile[key]       
+            except:
+                pass
+
+            known_face_names = list(all_face_encodings.keys())
+            known_face_encodings = np.array(list(all_face_encodings.values()))            
+
+            # Find all the faces and face encodings in the current frame of video
+            face_locations = face_recognition.face_locations(saved_image)
+            face_encodings = face_recognition.face_encodings(saved_image, face_locations)
+
+            face_names = []
+            for face_encoding in face_encodings:
+                # See if the face is a match for the known face(s)
+                matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+                name = "Unknown"
+                face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
+                best_match_index = np.argmin(face_distances)
+                if matches[best_match_index]:
+                    name = known_face_names[best_match_index]
+                    try:
+                        rad_obj = Radcheck.objects.get(username=name)
+                        try:
+                            Radcheck.objects.filter(username=clientmac).delete()
+                        except:
+                            pass
+                        Radcheck.objects.create(
+                            username=clientmac,
+                            attribute="Cleartext-Password", 
+                            op=":=", 
+                            value=clientmac,
+                            room=rad_obj.room                            
+                        )
+                        data = '<h1 id="replace">'
+                        data += '<input name="user" type="text" class="form-control" value="' + rad_obj.username + '">'
+                        data += '<input name="password" type="password" class="form-control" value="'+ rad_obj.value + '">'
+                        data += '<button id="auto-login" type="submit" class="btn btn-primary btn-lg" style="margin-top:1em;">Login</button>'
+                        data +=  '</h1>'
+                        return JsonResponse({ 'status' : data})                      
+                    except:
+                        data = '<h1 id="replace">'
+                        data += 'Please wait ...'
+                        data +=  '</h1>'
+                        return JsonResponse({ 'status' : data})                      
+
                     data = '<h1 id="replace">'
                     data += 'Please wait ...'
                     data +=  '</h1>'
-                    return JsonResponse({ 'status' : data})                      
-
-                data = '<h1 id="replace">'
-                data += 'Please wait ...'
-                data +=  '</h1>'
-                return JsonResponse({ 'status' : data})  
-            else:
-                data = '<h1 id = "replace">'
-                data += 'Please wait ...'
-                data +=  '</h1>'
-                return JsonResponse({ 'status' : data})  
-        return JsonResponse({'status': "Not found"})  
-    else:
-        context = {
-        }
-        template = get_template( 'stellar_login_face.html')
-        return HttpResponse(template.render(context,request))              
+                    return JsonResponse({ 'status' : data})  
+                else:
+                    data = '<h1 id = "replace">'
+                    data += 'Please wait ...'
+                    data +=  '</h1>'
+                    return JsonResponse({ 'status' : data})  
+            return JsonResponse({'status': "Not found"})  
+        else:
+            context = {
+            }
+            template = get_template( 'stellar_login_face.html')
+            return HttpResponse(template.render(context,request))              
