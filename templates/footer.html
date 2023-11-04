@@ -1,51 +1,57 @@
-
 {% load static %}
 <footer class="section footer-section">
-    <div class="container">
-      <div class="row mb-4">
-        <div class="col-md-3 mb-5">
-          <ul class="list-unstyled link">
-            <li><a href="https://www.al-enterprise.com/en/company/about-us">About Us</a></li>
-            <li><a href="https://www.al-enterprise.com/en/legal">Terms &amp; Conditions</a></li>
-            <li><a href="https://www.al-enterprise.com/en/legal/privacy">Privacy Policy</a></li>
-           <li><a href="https://www.al-enterprise.com/en/company/ale-worldwide-presence">Offices</a></li>
-          </ul>
-        </div>
-        <div class="col-md-3 mb-5">
-          <ul class="list-unstyled link">
-            <li><a href="https://www.al-enterprise.com/en/industries/hospitality">Hospitality Solutions</a></li>
-            <li><a href="https://www.al-enterprise.com/en/industries/hospitality/guest-experience">Guest Experience</a></li>
-            <li><a href="https://www.al-enterprise.com/en/products/wlan/omniaccess-stellar-access-point-1301h">Hospitality Access Points</a></li>
-            <li><a href="https://www.al-enterprise.com/en/solutions/hybrid-pol">Hybrid POL</a></li>
-          </ul>
-        </div>
-        <div class="col-md-3 mb-5 pr-md-5 contact-info">
-          <!-- <li>198 West 21th Street, <br> Suite 721 New York NY 10016</li> -->
-          <p><span class="d-block"><span class="ion-ios-location h5 mr-3 text-primary"></span>&nbsp&nbsp Address:</span> <span> Viva Business Park, <br> 750E Chai Chee Road #05-01/02, S(469005) </span></p>
-          <p><span class="d-block"><span class="ion-ios-telephone h5 mr-3 text-primary"></span>&nbsp&nbsp Phone:</span> <span> (+65) 6812 1950</span></p>
-          <p><span class="d-block"><span class="ion-ios-email h5 mr-3 text-primary"></span>&nbsp&nbsp Email:</span> <span> support@al-enterprise.com</span></p>
-        </div>
-        <div class="col-md-3 mb-5">
-          <p>Sign up for our newsletter</p>
-          <form action="#" class="footer-newsletter">
-            <div class="form-group">
-              <input type="email" class="form-control" placeholder="Email...">
-              <button type="submit" class="btn"><span class="fa fa-paper-plane"></span></button>
-            </div>
-          </form>
-        </div>
+  <div class="container">
+    <div class="row mb-4">
+      <div class="col-md-3 mb-5">
+        <ul class="list-unstyled link">
+          <li><a href="https://www.al-enterprise.com/en/company/about-us">About Us</a></li>
+          <li><a href="https://www.al-enterprise.com/en/legal">Terms &amp; Conditions</a></li>
+          <li><a href="https://www.al-enterprise.com/en/legal/privacy">Privacy Policy</a></li>
+          <li><a href="https://www.al-enterprise.com/en/company/ale-worldwide-presence">Offices</a></li>
+        </ul>
       </div>
-
+      <div class="col-md-3 mb-5">
+        <ul class="list-unstyled link">
+          <li><a href="https://www.al-enterprise.com/en/industries/hospitality">Hospitality Solutions</a></li>
+          <li><a href="https://www.al-enterprise.com/en/industries/hospitality/guest-experience">Guest Experience</a>
+          </li>
+          <li><a href="https://www.al-enterprise.com/en/products/wlan/omniaccess-stellar-access-point-1301h">Hospitality
+              Access Points</a></li>
+          <li><a href="https://www.al-enterprise.com/en/solutions/hybrid-pol">Hybrid POL</a></li>
+        </ul>
+      </div>
+      <div class="col-md-3 mb-5 pr-md-5 contact-info">
+        <!-- <li>198 West 21th Street, <br> Suite 721 New York NY 10016</li> -->
+        <p><span class="d-block"><span class="ion-ios-location h5 mr-3 text-primary"></span>&nbsp&nbsp Address:</span>
+          <span> Viva Business Park, <br> 750E Chai Chee Road #05-01/02, S(469005) </span></p>
+        <p><span class="d-block"><span class="ion-ios-telephone h5 mr-3 text-primary"></span>&nbsp&nbsp Phone:</span>
+          <span> (+65) 6812 1950</span></p>
+        <p><span class="d-block"><span class="ion-ios-email h5 mr-3 text-primary"></span>&nbsp&nbsp Email:</span> <span>
+            support@al-enterprise.com</span></p>
+      </div>
+      <div class="col-md-3 mb-5">
+        <p>Sign up for our newsletter</p>
+        <form action="#" class="footer-newsletter">
+          <div class="form-group">
+            <input type="email" class="form-control" placeholder="Email...">
+            <button type="submit" class="btn"><span class="fa fa-paper-plane"></span></button>
+          </div>
+        </form>
+      </div>
     </div>
-  </footer>
+
+  </div>
+</footer>
 
 
 <footer class="footer-section fixed-bottom">
-        <div class="container">
-                <div class="d-flex justify-content-center">
-                    Copyright ©<script>document.write(new Date().getFullYear());</script> All rights reserved by <a href="http://www.al-enterprise.com/" target="_blank">&nbsp Alcatel-Lucent Enterprise</a>
-                </div>
-        </div>
+  <div class="container">
+    <div class="d-flex justify-content-center">
+      Copyright ©
+      <script>document.write(new Date().getFullYear());</script> All rights reserved by <a
+        href="http://www.al-enterprise.com/" target="_blank">&nbsp Alcatel-Lucent Enterprise</a>
+    </div>
+  </div>
 </footer>
 <script src="{% static 'js/jquery-3.3.1.min.js' %}"> </script>
 <script src="{% static 'js/jquery-migrate-3.0.1.min.js' %}"></script>
@@ -59,18 +65,47 @@
 <script src="{% static 'js/main.js' %}"></script>
 
 <script>
-    $(window).scroll(function(){  
-        if ($(this).scrollTop() > 44) {
-            // add padding top to show content behind navbar
-            $('.navbar').addClass("fixed-top", 1000);
-            $('.navbar').addClass("scroll_nav",1000);
-            $('.header-nav-link').addClass("scroll_nav",1000);
+  $(window).scroll(function () {
+    if ($(this).scrollTop() > 44) {
+      // add padding top to show content behind navbar
+      $('.navbar').addClass("fixed-top", 1000);
+      $('.navbar').addClass("scroll_nav", 1000);
+      $('.header-nav-link').addClass("scroll_nav", 1000);
 
-        }else{
-            $('.navbar').removeClass("fixed-top",1000);
-            $('.navbar').removeClass("scroll_nav",1000);
-            $('.header-nav-link').removeClass("scroll_nav",1000);
-        }   
-    });
+    } else {
+      $('.navbar').removeClass("fixed-top", 1000);
+      $('.navbar').removeClass("scroll_nav", 1000);
+      $('.header-nav-link').removeClass("scroll_nav", 1000);
+    }
+  });
 </script>
 
+<!-- SERVICE WORKER JS -->
+<script>// REGISTER SERVICE WORKER
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker
+    .register('{% url "sw"%}')
+    .then((registration) => {
+      registration.addEventListener("updatefound", () => {
+        // If updatefound is fired, it means that there's
+        // a new service worker being installed.
+        const installingWorker = registration.installing;
+        console.log(
+          "A new service worker is being installed:",
+          installingWorker,
+        );
+
+        // You can listen for changes to the installing service worker's
+        // state via installingWorker.onstatechange
+      });
+    })
+    .catch((error) => {
+      console.error(`Service worker registration failed: ${error}`);
+    });
+} else {
+  console.error("Service workers are not supported.");
+}
+
+</script>
+<!-- END SERVICE WORKER -->

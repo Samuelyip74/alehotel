@@ -1,4 +1,5 @@
 from django.template.loader import get_template
+from django.views.generic.base import TemplateView
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 import string
@@ -623,4 +624,9 @@ def stellar_login_face(request):
             context = {
             }
             template = get_template( 'stellar_login_face.html')
-            return HttpResponse(template.render(context,request))              
+            return HttpResponse(template.render(context,request))     
+
+"""Service worker for offline app"""
+class ServiceWorker(TemplateView):
+    template_name = "sw.js"
+    content_type = "application/javascript"                     
