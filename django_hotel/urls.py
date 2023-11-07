@@ -15,7 +15,8 @@ from .views import (
     unlock_door,
     stellar_login,
     stellar_login_face,
-    ServiceWorker
+    ServiceWorker,
+    captive_redirect
 )
 
 urlpatterns = [
@@ -31,6 +32,7 @@ urlpatterns = [
     path('ale/login', stellar_login, name='stellar_login'), 
     path('ale/face/login', stellar_login_face, name='stellar_login_face'), 
     path('service-worker.js', ServiceWorker.as_view(), name="sw"),
+    path('captive/', captive_redirect, name="captive"),
     path('admin/', admin.site.urls),
     url(r'^$', index, name='home'),
 ]

@@ -20,6 +20,12 @@ import cv2
 import pickle
 import numpy as np
 
+def captive_redirect(request):
+    context = {
+    }
+    template = get_template( 'redirect.html')
+    return HttpResponse(template.render(context,request))      
+
 def index(request):
     context = {
     }
@@ -398,6 +404,8 @@ def stellar_login(request):
 
         try:
             url = request.GET['url']
+            if "apple.com" in url:
+                url = "http://www.al-enterprise.com"              
         except:
             pass     
 
@@ -425,6 +433,8 @@ def stellar_login(request):
         clientmac = clientmac.upper()        
         try:
             url = data['url']
+            if "apple.com" in url:
+                url = "http://www.al-enterprise.com"              
         except:
             pass
 
@@ -515,6 +525,9 @@ def stellar_login_face(request):
 
         try:
             url = request.GET['url']
+            if "apple.com" in url:
+                url = "http://www.al-enterprise.com" 
+                          
         except:
             pass     
 
