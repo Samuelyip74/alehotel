@@ -177,7 +177,9 @@ align-items: center;">
               let str = data['status'];
               var Obj = document.getElementById('replace'); 
               Obj.outerHTML = str ;
-              document.getElementById('auto-login').click();
+              setInterval(function() {
+                              document.getElementById('auto-login').click();
+              }, 3000);              
           }
         },
         error: (error) => {
