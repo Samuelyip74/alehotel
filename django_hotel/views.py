@@ -334,13 +334,13 @@ def unlock_door(request):
         known_face_encodings = np.array(list(all_face_encodings.values()))            
 
         # Find all the faces and face encodings in the current frame of video
-        face_locations = face_recognition.face_locations(saved_image)
+        face_locations = face_recognition.face_locations(saved_image,number_of_times_to_upsample=2)
         face_encodings = face_recognition.face_encodings(saved_image, face_locations)
 
         face_names = []
         for face_encoding in face_encodings:
             # See if the face is a match for the known face(s)
-            matches = face_recognition.compare_faces(known_face_encodings, face_encoding, tolerance=0.5)
+            matches = face_recognition.compare_faces(known_face_encodings, face_encoding, tolerance=0.4)
             name = "Unknown"
             face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
             best_match_index = np.argmin(face_distances)
@@ -586,13 +586,13 @@ def stellar_login_face(request):
             known_face_encodings = np.array(list(all_face_encodings.values()))            
 
             # Find all the faces and face encodings in the current frame of video
-            face_locations = face_recognition.face_locations(saved_image)
+            face_locations = face_recognition.face_locations(saved_image,number_of_times_to_upsample=2)
             face_encodings = face_recognition.face_encodings(saved_image, face_locations)
 
             face_names = []
             for face_encoding in face_encodings:
                 # See if the face is a match for the known face(s)
-                matches = face_recognition.compare_faces(known_face_encodings, face_encoding, tolerance=0.5)
+                matches = face_recognition.compare_faces(known_face_encodings, face_encoding, tolerance=0.4)
                 name = "Unknown"
                 face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
                 best_match_index = np.argmin(face_distances)
@@ -642,4 +642,4 @@ def stellar_login_face(request):
 """Service worker for offline app"""
 class ServiceWorker(TemplateView):
     template_name = "sw.js"
-    content_type = "application/javascript"                     
+    content_type = "application/javascript"                       
