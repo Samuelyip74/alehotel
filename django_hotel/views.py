@@ -252,6 +252,7 @@ def check_out(request):
         try:
             room_obj = Room.objects.get(number=data['room_num'], is_active=True)
             room_obj.is_active = False
+            room_obj.user = None
             room_obj.save()
             try:
                 Radcheck.objects.filter(room=room_obj).delete()
@@ -642,4 +643,30 @@ def stellar_login_face(request):
 """Service worker for offline app"""
 class ServiceWorker(TemplateView):
     template_name = "sw.js"
-    content_type = "application/javascript"                       
+    content_type = "application/javascript"   
+
+
+def guest_services(request):
+    rainbowID = rainbowPassword = room_obj = None
+    try:
+        if request.user.is_authenticated:
+            try:
+                room_obj = Room.objects.get(user=request.user)
+                rainbowID = room_obj.rainbowID
+                rainbowPassword = room_obj.rainbowPassword
+            except Room.DoesNotExist:
+                rainbowID = "samuel.yip@al-enterprise.com"
+                rainbowPassword = "Ciscotac_123"
+        else:
+            rainbowID = "samuel.yip@al-enterprise.com"
+            rainbowPassword = "Ciscotac_123"
+    except:
+        rainbowID = "samuel.yip@al-enterprise.com"
+        rainbowPassword = "Ciscotac_123"
+
+    context = {
+        "rainbowID" : rainbowID,
+        "rainbowPassword" : rainbowPassword
+    }
+    template = get_template( 'guest_services.html')
+    return HttpResponse(template.render(context,request))                            

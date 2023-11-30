@@ -16,7 +16,8 @@ from .views import (
     stellar_login,
     stellar_login_face,
     ServiceWorker,
-    captive_redirect
+    captive_redirect,
+    guest_services
 )
 
 urlpatterns = [
@@ -28,6 +29,7 @@ urlpatterns = [
     path('check_in/', check_in, name='check_in'),
     path('check_out/', check_out, name='check_out'),
     path('list/', list_rooms, name='listing'),
+    path('guest_services/', guest_services, name='guest_services'),
     path('accounts/', include('allauth.urls')),   
     path('ale/login', stellar_login, name='stellar_login'), 
     path('ale/face/login', stellar_login_face, name='stellar_login_face'), 

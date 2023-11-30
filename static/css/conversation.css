@@ -1,0 +1,45 @@
+.bubble-left {
+    margin:5px;
+    margin-left:auto;
+    float:left;
+    border: blue;
+    background: blue;
+    color: white;
+    border-radius: 10px;
+    width: 150px;
+    padding: 1em;
+    border-radius: 10px;
+}
+
+.bubble-right {
+    margin:5px;
+    float:right;
+    border: green;
+    background: green;
+    color: white;
+    border-radius: 10px;
+    width: 150px;
+    padding: 1em;
+    border-radius: 10px;
+}
+
+
+.sr-only {
+    color:white;
+}
+
+#loaded {
+    display: None;
+}
+
+.icon {
+    margin: 10px !important;
+    width: 5em;
+    height:5em;
+}
+
+.card {
+    text-align: center;
+    align-items: center;
+    margin:1em;
+}

@@ -16,6 +16,9 @@ class Room(models.Model):
     number = models.IntegerField('Number',blank=True)
     is_active = models.BooleanField('Active',blank=True, default=False)
     room_type  = models.ForeignKey(Product,null=True, blank=True,on_delete=models.CASCADE,unique=False)
+    rainbowID = models.CharField('Rainbow User ID',max_length=200,blank=True)
+    rainbowPassword = models.CharField('Rainbow User Password',max_length=200,blank=True)
+
 
     def __str__(self):
         return str(self.number)
