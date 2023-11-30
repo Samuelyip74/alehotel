@@ -56,6 +56,7 @@ let SignIn = function SignIn() {
           
           document.getElementById("loading").style.display = "none";
           document.getElementById("loaded").style.display = "block";
+          checkMakeAudioVideoCall();
 
 
     })
@@ -184,6 +185,110 @@ let sendMessageEnterPress = function sendMessageEnterPress(event) {
     }
 }
 document.getElementById("sendMessage").addEventListener("keypress", sendMessageEnterPress);
+
+let checkMakeAudioVideoCall = function checkMakeAudioVideoCall(){
+
+    if(rainbowSDK.webRTC.canMakeAudioVideoCall()) {
+        /* Your browser is compliant: You can make audio and video call using WebRTC in your application */
+        console.log("Audio OK")
+        document.getElementById("call").style.display = "flex;";
+
+    }
+    else {
+        /* Your browser is not compliant: Do not propose audio and video call in your application */
+        console.log("Audio NOK")
+        document.getElementById("call").style.display = "none;";
+    }
+
+};
+
+let callInAudio = function callInAudio(contactId) {
+    /* Call this API to call a contact using only audio stream*/
+    rainbowSDK.webRTC.callInAudio(contactId).then(res => {
+        if(res.label === "OK") {
+            /* Your call has been correctly initiated. Waiting for the other peer to answer */
+        }
+    }).catch(err => {
+        return err
+    });
+};
+
+let initialCall = function initialCall() {
+    var who = document.getElementById("whois").textContent 
+    if(who == "Operator"){
+        callInAudio(OperatorContact.id)
+    } else if (who == "Room Service") {
+        callInAudio(RoomServiceContact.id)
+    }
+
+}
+document.getElementById("call").addEventListener("click", initialCall);
+
+var callevent = null
+let onWebRTCCallChanged = function onWebRTCCallChanged(event) {
+    callevent = event;
+    let call = event.detail;
+    console.log(call.status.value)
+    if (call.status.value === "incommingCall") {
+        const CallToast = document.getElementById('CallToast');
+        CallToast.classList.add("show");
+    } else if(call.status.value === "Unknown"){
+        CallToast.classList.remove("show");
+    }
+
+
+};
+
+/* Subscribe to WebRTC call change */
+document.addEventListener(rainbowSDK.webRTC.RAINBOW_ONWEBRTCCALLSTATECHANGED, onWebRTCCallChanged)
+
+var callerid = null;
+let AnswerCall = function AnswerCall(){
+        /* Listen to WebRTC call state change */
+    var event = callevent
+    let call = event.detail;
+
+    if (call.status.value === "incommingCall") {
+        // You have an incoming call, do something about it:
+        callerid = call.id;
+        // Detect the type of incoming call
+
+        if (call.remoteMedia === 3) {
+
+            // The incoming call is of type audio + video
+            rainbowSDK.webRTC.answerInVideo(call.id);
+
+            // Populate the #minivideo and #largevideo elements with the video streams
+
+            rainbowSDK.webRTC.showLocalVideo();
+            rainbowSDK.webRTC.showRemoteVideo(call.id);
+
+        } else if (call.remoteMedia === 1) {
+
+            // The incoming call is of type audio
+            rainbowSDK.webRTC.answerInAudio(call.id);
+        }
+    }
+    // CallToast.classList.remove("show");
+    document.getElementById("Answer").style.display = "None";
+    document.getElementById("Reject").style.display = "None";
+    document.getElementById("End").style.display = "inline-block";
+}
+document.getElementById("Answer").addEventListener("click", AnswerCall);
+
+let dropCall = function dropCall(){
+    releaseCall(callerid);
+    document.getElementById("Answer").style.display = "inline-block";
+    document.getElementById("Reject").style.display = "inline-block";
+    document.getElementById("End").style.display = "None";
+}
+document.getElementById("End").addEventListener("click", dropCall);
+
+
+let releaseCall = function releaseCall(callerid) {
+    /* Call this API to release the call */
+    let res = rainbowSDK.webRTC.release(callerid);
+};
 
 
 rainbowSDK.start();

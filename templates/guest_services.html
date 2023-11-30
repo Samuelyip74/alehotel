@@ -19,7 +19,6 @@
   var myRainbowPassword = '{{ rainbowPassword }}'; // Replace by your password
 </script>
 <div class="container" style="margin: 7em auto 5em auto;width: 80%;">
-
   <div class="d-flex justify-content-center">
     <div id="loading" class="spinner-border m-5" role="status" style="margin:8em !important;">
       <span class="sr-only">Loading...</span>
@@ -66,30 +65,47 @@
           </div> 
       </div>
     </div>
-
   </div>
-        
-  <div class="modal fade" id="exampleModalFullscreen" tabindex="-1" aria-labelledby="exampleModalFullscreenLabel" style="display: none;" aria-hidden="true">
-      <div class="modal-dialog modal-fullscreen">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title h4" id="exampleModalFullscreenLabel">Talking: <span id="whois"></span></h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body" id="conversations">
-            
-          </div>
-          <div class="modal-footer">
-              <div class="input-group flex-nowrap">
-                  <input type="text" id="sendMessage" class="form-control">
-                  <a><span class="input-group-text" id="send">Send</span></a>
-              </div>
-          </div>
-        </div>
-      </div>
-  </div>
-
 </div>
+<div class="modal fade" id="exampleModalFullscreen" tabindex="-1" aria-labelledby="exampleModalFullscreenLabel" style="display: none;" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title h4" id="exampleModalFullscreenLabel">Talking: <span id="whois"></span></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="conversations">
+        
+      </div>
+      <div class="modal-footer">
+          <div class="input-group flex-nowrap">
+              <input type="text" id="sendMessage" class="form-control">
+              <a><span class="input-group-text" id="send">Send</span></a>
+              <a><span class="input-group-text" id="call" >Call</span></a>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center w-100">
+  <!-- Then put toasts within -->
+  <div id="CallToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" style="
+    position: fixed;
+    bottom: 0;
+    z-index: 9000;
+">
+    <div class="toast-header">
+      <img src="{% static 'images/callIcon.png' %}" width="15px" height="15px" class="rounded me-2">
+      <strong class="me-auto">Incoming call...</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      <button id="Answer" type="button" class="btn btn-primary" >Answer</button>
+      <button id="Reject" type="button" class="btn btn-danger" >Reject</button>
+      <button id="End" type="button" class="btn btn-danger"  style="display:None">End</button>
+    </div>
+  </div>
+</div>   
 
 
 
