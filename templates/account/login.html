@@ -12,7 +12,7 @@
       <div class="px-4 py-5 my-5 text-center" style="min-height:40vh;">
         <span style="font-size: x-large;">Sign in</span>
         <div class="container" style="margin:auto;width:80%;">
-          <form action="{% url 'account_login' %}" method="post" style="margin:auto;width:50%">
+          <form action="{% url 'account_login' %}" method="post" style="margin:auto;">
             {% csrf_token %} 
             <div class="row g-3">
               <div class="col-sm">

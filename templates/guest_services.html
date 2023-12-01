@@ -27,42 +27,52 @@
   <div id="loaded">
     <div class="container">
       <div class="row">
-        <a href="{% url 'check_in' %}" style="width:fit-content; padding: 0;">
-          <div class="card" style="width:18em">
-            <img src="{% static 'images/checkIn.png' %}" class="card-img-top icon">
-            <div class="card-body">
-              <p class="card-text">Check In</p>
-            </div>
-          </div> 
-        </a>
-        <a href="{% url 'check_out' %}" style="width:fit-content; padding: 0;">
-        <div class="card" style="width:18em">
-          <img src="{% static 'images/checkOut.png' %}" class="card-img-top icon">
-          <div class="card-body">
-            <p class="card-text">Check Out</p>
-          </div>
-        </div>  
-        </a>
-        <a href="{% url 'unlock_door' %}" style="width:fit-content; padding: 0;">
-        <div class="card" style="width:18em">
-          <img src="{% static 'images/unlockDoor.png' %}" class="card-img-top icon">
-          <div class="card-body">
-            <p class="card-text">Unlock Door</p>
-          </div>
-        </div>    
-        </a>                                       
-          <div class="card" id="ContactOperator" style="width:18em" data-bs-toggle="modal" data-bs-target="#exampleModalFullscreen">
+        <div class="col-sm">
+          <a href="{% url 'check_in' %}" style="width:fit-content; padding: 0;">
+            <div class="card" >
+              <img src="{% static 'images/checkIn.png' %}" class="card-img-top icon">
+              <div class="card-body">
+                <p class="card-text">Check In</p>
+              </div>
+            </div> 
+          </a>
+        </div>
+        <div class="col-sm">
+          <a href="{% url 'check_out' %}" style="width:fit-content; padding: 0;">
+            <div class="card" >
+              <img src="{% static 'images/checkOut.png' %}" class="card-img-top icon">
+              <div class="card-body">
+                <p class="card-text">Check Out</p>
+              </div>
+            </div>  
+            </a>
+        </div>
+        <div class="col-sm">
+          <a href="{% url 'unlock_door' %}" style="width:fit-content; padding: 0;">
+            <div class="card" >
+              <img src="{% static 'images/unlockDoor.png' %}" class="card-img-top icon">
+              <div class="card-body">
+                <p class="card-text">Unlock Door</p>
+              </div>
+            </div>    
+            </a>   
+        </div>
+        <div class="col-sm">
+          <div class="card" id="ContactOperator" data-bs-toggle="modal" data-bs-target="#exampleModalFullscreen">
             <img src="{% static 'images/operatorIcon.png' %}" class="card-img-top icon">
             <div class="card-body">
               <p class="card-text">Chat with Operator</p>
             </div>
-          </div>  
-          <div class="card" id="RoomService" style="width:18em" data-bs-toggle="modal" data-bs-target="#exampleModalFullscreen">
+          </div> 
+        </div>
+        <div class="col-sm">
+          <div class="card" id="RoomService" data-bs-toggle="modal" data-bs-target="#exampleModalFullscreen">
             <img src="{% static 'images/RoomService.png' %}" class="card-img-top icon">
             <div class="card-body">
               <p class="card-text">Contact Room Service</p>
             </div>
           </div> 
+        </div>                                 
       </div>
     </div>
   </div>
