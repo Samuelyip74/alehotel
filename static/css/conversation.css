@@ -1,3 +1,15 @@
+.bubble-center {
+    margin:auto;
+    float:left;
+    border: blue;
+    background: grey;
+    color: white;
+    border-radius: 10px;
+    width: 150px;
+    padding: 1em;
+    border-radius: 10px;
+}
+
 .bubble-left {
     margin:5px;
     margin-left:auto;

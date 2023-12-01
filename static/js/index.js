@@ -142,10 +142,9 @@ function displayMessages(conversations, currentPage) {
 
 function displayMyMessage(message, className) {
 
-    if (message.includes("activeCallMsg")) { 
-        console.log("Incoming call");
-        message = "Incoming Call";
-    };
+    if (message.includes("activeCallMsg")) { message = "Incoming Call"; className = 'bubble-center'};
+    if (message.includes("missedCall")) { message = "Missed Call"; className = 'bubble-center'};
+
     const div = document.getElementById("conversations")
     div.innerHTML += '<div class="row"><div class="' + className + '">' + message + '</div></div>';
     div.scrollTo({
