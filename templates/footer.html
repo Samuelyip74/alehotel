@@ -63,7 +63,25 @@
 <script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
 <script src="{% static 'js/jquery.timepicker.min.js' %}"></script>
 <script src="{% static 'js/main.js' %}"></script>
-
+<script src="https://cdn.botpress.cloud/webchat/v1/inject.js"></script>
+<script>
+  window.botpressWebChat.init({
+      "composerPlaceholder": "Chat with bot",
+      "botConversationDescription": "This chatbot was built surprisingly fast with Botpress",
+      "botId": "ed326238-7e9d-4274-ab60-c3fb22e4b811",
+      "hostUrl": "https://cdn.botpress.cloud/webchat/v1",
+      "messagingUrl": "https://messaging.botpress.cloud",
+      "clientId": "ed326238-7e9d-4274-ab60-c3fb22e4b811",
+      "webhookId": "517b7637-fb73-412e-9d5b-085c4ec85831",
+      "lazySocket": true,
+      "themeName": "prism",
+      "frontendVersion": "v1",
+      "useSessionStorage": true,
+      "showBotInfoPage": true,
+      "theme": "prism",
+      "themeColor": "#2563eb"
+  });
+</script>
 <script>
   $(window).scroll(function () {
     if ($(this).scrollTop() > 44) {
