@@ -2,6 +2,13 @@ from django.template.loader import get_template
 from django.views.generic.base import TemplateView
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import authentication, permissions
+from rest_framework import status
+from rest_framework.response import Response
+from django.contrib.auth.models import User
+
 import string
 import random
 import os
@@ -670,3 +677,43 @@ def guest_services(request):
     }
     template = get_template( 'guest_services.html')
     return HttpResponse(template.render(context,request))                            
+
+class webhook_reservation(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAdminUser]
+    def post(self,request):
+        data = json.loads(request.body)
+        try:
+
+            start_date_obj = datetime.strptime(data['reservation'][0]['startdate'],'%Y-%m-%dT%H:%M:%S.%fZ')
+            end_date_obj = datetime.strptime(data['reservation'][0]['enddate'],'%Y-%m-%dT%H:%M:%S.%fZ')
+            delta = end_date_obj - start_date_obj  
+            user_obj, created = User.objects.get_or_create(
+                first_name = data['reservation'][0]['firstname'],
+                last_name = data['reservation'][0]['lastname'],
+                email = data['reservation'][0]['email'],
+            )
+            if created:
+                user_obj.username = data['reservation'][0]['firstname'] + data['reservation'][0]['lastname']
+                user_obj.set_password('Ciscotac_123')
+                user_obj.save()
+            product_obj = Product.objects.get(name__contains=data['reservation'][0]['room_type'])
+            confirmation_code = "".join(random.choices(string.ascii_letters, k=8))
+            reserve_obj = Reservation.objects.create(
+                user = user_obj,
+                start_date = start_date_obj,
+                end_date = end_date_obj,
+                room = product_obj,
+                guest=data['reservation'][0]['guest'],
+                days=delta.days,
+                code = confirmation_code
+            )
+            content = {
+                "results" : confirmation_code
+            }
+            return Response(content, status=status.HTTP_201_CREATED)
+        
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(status=status.HTTP_400_BAD_REQUEST)

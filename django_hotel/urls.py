@@ -17,11 +17,13 @@ from .views import (
     stellar_login_face,
     ServiceWorker,
     captive_redirect,
-    guest_services
+    guest_services,
+    webhook_reservation
 )
 
 urlpatterns = [
     path('booknow/<str:startdate>/<str:enddate>/<str:guest>/<int:pk>/', booking, name='booking'),
+    path('webhook/reservation/', webhook_reservation.as_view(), name='webhook_reservation'),
     path('unlock_door/', unlock_door, name='unlock_door'),
     path('check_in_out/', check_in_out, name='check_in_out'),
     path('check_in/<int:pk>/', check_in_confirmation, name='check_in_confirmation'),
